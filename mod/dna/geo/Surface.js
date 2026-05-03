@@ -3,13 +3,18 @@
 
 let id = 0
 
+const OPT_WIREFRAME = 1
+const OPT_TEXTURE   = 2
+
 class Surface {
 
     constructor(st) {
         extend(this, {
             name: 'surface' + (++id),
+
             renderOpt: vec4(1, 0, 0, 0), // render options
-            //renderOpt: vec4(1, 1, 0, 0), // render options
+            //renderOpt: vec4(1, 1, 1, 1), // render options buf: {},
+
             buf: {},
         }, st)
 
@@ -60,8 +65,8 @@ class Surface {
         glu.applyNormalMatrix()
 
         // rendering options
-        if (this.tex) this.renderOpt[2] = 1
-        else this.renderOpt[2] = 0
+        if (this.tex) this.renderOpt[OPT_TEXTURE] = 1
+        else this.renderOpt[OPT_TEXTURE] = 0
         glu.uniform4fv('uOpt', this.renderOpt)
 
         // -------------------------------------
@@ -94,7 +99,7 @@ class Surface {
     draw() {
         this.preDraw()
 
-        if (this.renderOpt[1]) {
+        if (this.renderOpt[OPT_WIREFRAME]) {
             // render wireframes
             gl.lineWidth(4)
             this.bindAttribute(this.buf.wires, 'aVertPos')
@@ -115,3 +120,6 @@ class Surface {
         this.postDraw()
     }
 }
+Surface.OPT_WIREFRAME = 1
+Surface.OPT_TEXTURE   = 2
+

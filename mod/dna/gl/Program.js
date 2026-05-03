@@ -31,8 +31,8 @@ class Program {
     }
 
     bindShaders() {
-        const vShader = this.vShader = _.selectOne(this.vertexPath)
-        const fShader = this.fShader = _.selectOne(this.fragmentPath)
+        const vShader = this.vShader = __$.selectOne(this.vertexPath)
+        const fShader = this.fShader = __$.selectOne(this.fragmentPath)
 
         if (!vShader) throw `[${this.id}:${this.name}] Can't find vertex shader @[${this.vertexPath}]`
         if (!(vShader instanceof dna.gl.Shader) || vShader.type !== 'vertex') {

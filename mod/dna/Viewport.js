@@ -1,12 +1,19 @@
+// a container for WebGL viewport
 class Viewport extends sys.LabFrame {
 
     constructor(st) {
         super( augment({
             name:  'port',
+
             cam:    null,
+            prog:   null,
 
             hidden: false,
         }, st) )
+    }
+
+    setup() {
+        this.prog = lib.glsl.zprog.flat
     }
 
     bindCamera(cam) {
@@ -15,8 +22,8 @@ class Viewport extends sys.LabFrame {
     }
 
     setupDraw() {
-        //lib.glut.useProgram(lib.glsl.zprog.zap)
-        glu.withProgram(lib.glsl.zprog.flat)
+        glu.withProgram(this.prog)
+        //glu.withProgram(lib.glsl.zprog.flat)
         //glu.withProgram(lib.glsl.zprog.plainColor)
 
         gl.enable(gl.DEPTH_TEST)

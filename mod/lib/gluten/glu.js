@@ -140,12 +140,22 @@ const __glu__ = {
         this.withUniforms(context.env.uniforms)
     },
 
-    uniform1i: function(uniform, v0, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
+    validateUniform(uniform) {
+        let uniformName = 'unknown'
+        if (isStr(uniform)) {
+            uniformName = uniform
+            uniform = this.uniform[uniform]
         }
+
+        if (uniform) return uniform
+
+        if (env.config.failOnMissingUniform) throw new Error(`Missing the uniform: [${uniformName}]!`)
+    },
+
+    uniform1i: function(uniform, v0, local) {
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform1i(uniform.glLoc, v0)
 
         context.env.uniforms.push({
@@ -157,11 +167,9 @@ const __glu__ = {
     },
 
     uniform1iv: function(uniform, iv, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform1iv(uniform.glLoc, iv)
 
         context.env.uniforms.push({
@@ -173,11 +181,9 @@ const __glu__ = {
     },
 
     uniform1f: function(uniform, f0, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform1f(uniform.glLoc, f0)
 
         context.env.uniforms.push({
@@ -189,11 +195,9 @@ const __glu__ = {
     },
 
     uniform1fv: function(uniform, fv, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform1fv(uniform.glLoc, fv)
 
         context.env.uniforms.push({
@@ -205,11 +209,9 @@ const __glu__ = {
     },
     
     uniform2i: function(uniform, i0, i1, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform2i(uniform.glLoc, i0, i1)
 
         context.env.uniforms.push({
@@ -222,11 +224,9 @@ const __glu__ = {
     },
 
     uniform2iv: function(uniform, iv, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform2iv(uniform.glLoc, iv)
 
         context.env.uniforms.push({
@@ -238,11 +238,9 @@ const __glu__ = {
     },
 
     uniform2f: function(uniform, f0, f1, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform2f(uniform.glLoc, f0, f1)
 
         context.env.uniforms.push({
@@ -255,11 +253,9 @@ const __glu__ = {
     },
 
     uniform2fv: function(uniform, fv, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform2fv(uniform.glLoc, fv)
 
         context.env.uniforms.push({
@@ -271,11 +267,9 @@ const __glu__ = {
     },
 
     uniform3i: function(uniform, i0, i1, i2, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform3i(uniform.glLoc, i0, i1, i2)
 
         context.env.uniforms.push({
@@ -289,11 +283,9 @@ const __glu__ = {
     },
 
     uniform3iv: function(uniform, iv, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform3iv(uniform.glLoc, iv)
 
         context.env.uniforms.push({
@@ -305,11 +297,9 @@ const __glu__ = {
     },
 
     uniform3f: function(uniform, f0, f1, f2, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform3f(uniform.glLoc, f0, f1, f2)
 
         context.env.uniforms.push({
@@ -323,11 +313,9 @@ const __glu__ = {
     },
 
     uniform3fv: function(uniform, fv, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform3fv(uniform.glLoc, fv)
 
         context.env.uniforms.push({
@@ -339,11 +327,9 @@ const __glu__ = {
     },
 
     uniform4i: function(uniform, i0, i1, i2, i3, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform4i(uniform.glLoc, i0, i1, i2, i3)
 
         context.env.uniforms.push({
@@ -358,11 +344,9 @@ const __glu__ = {
     },
 
     uniform4iv: function(uniform, iv, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform4iv(uniform.glLoc, iv)
 
         context.env.uniforms.push({
@@ -374,11 +358,9 @@ const __glu__ = {
     },
 
     uniform4f: function(uniform, f0, f1, f2, f3, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform4f(uniform.glLoc, f0, f1, f2, f3)
 
         context.env.uniforms.push({
@@ -393,11 +375,9 @@ const __glu__ = {
     },
 
     uniform4fv: function(uniform, fv, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) throw new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniform4fv(uniform.glLoc, fv)
 
         context.env.uniforms.push({
@@ -409,11 +389,9 @@ const __glu__ = {
     },
 
     uniformMatrix2fv: function(uniform, fv, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniformMatrix2fv(uniform.glLoc, false, fv)
 
         context.env.uniforms.push({
@@ -425,11 +403,9 @@ const __glu__ = {
     },
 
     uniformMatrix3fv: function(uniform, fv, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniformMatrix3fv(uniform.glLoc, false, fv)
 
         context.env.uniforms.push({
@@ -441,11 +417,9 @@ const __glu__ = {
     },
 
     uniformMatrix4fv: function(uniform, fv, local) {
-        if (isStr(uniform)) uniform = this.uniform[uniform]
-        if (!uniform) {
-            if (env.config.failOnMissingUniform) new Error(`Missing a uniform!`)
-            return
-        }
+        uniform = this.validateUniform(uniform)
+        if (!uniform) return
+
         gl.uniformMatrix4fv(uniform.glLoc, false, fv)
 
         context.env.uniforms.push({

@@ -1,3 +1,4 @@
+// a lab frame with convenient _traits and _pods installation routines in the constructor
 class EntityFrame extends sys.LabFrame {
 
     constructor(st) {
