@@ -26,3 +26,9 @@ To catch all missing uniform, use:
 ```
 jam -d --failOnMissingUniform
 ```
+
+### Keystrokes
+
+```
+Ctrl+B - switch to wireframe mode and back
+```
