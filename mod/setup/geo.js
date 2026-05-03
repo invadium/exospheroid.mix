@@ -11,5 +11,19 @@ function geo() {
 
     // bake the mesh
     mesh.push('cube').label().bake()
+
+
+    // lets try to use the screwup compiler
+    // TODO something is off with the compile-decompile sequence
+    //      it definitelly executes the runes,
+    //      but never gets into the brew/bake routine
+    //      presumably because of the bytecode mismatch
+    //      after heavy js13k optimizations
+    const runes = lib.screw.screwUp(lib.screwUp.shape)
+    const res = lib.screw.unscrew(runes)
+    dir(res)
+
+    const res2 = lib.screw.unscrew.unscrewOne(runes)
+    dir(res2)
 }
 geo.Z = 11

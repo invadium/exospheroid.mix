@@ -2,20 +2,22 @@
 const opsRef = [
     // mnemonics
     'neogeo',
-    //'drop',
-    //'swap',
+    'drop',
+    'swap',
     'mpush',
     'mpop',
     'buf',
     'unbuf',
     'HPI',
-    //'add',
-    //'sub',
-    //'mul',
-    //'div',
+    'add',
+    'sub',
+    'mul',
+    'div',
     'precision',
-    //'smooth',
-    //'sharp',
+    'smooth',
+    'sharp',
+
+    // modifiers
     'mid',
     'mscale',
     'translate',
@@ -27,21 +29,25 @@ const opsRef = [
     'reflectZ',
     'scale',
     'stretch',
+
+    // geometry assemblers
     'tri',
     'tuv',
     'mt',           // define the material
-    //'plane',
-    //'sphere',
-    //'cylinder',
+    'plane',
+    'cube',
+    'sphere',
+    'cylinder',
     'circle',
 
+    // finalizer
     'bounds',
     'dat',
     'name',
     'brew',
-    //'brewWires',
+    'brewWires',
 
-    // debug ones
+    // debug ones -- TODO ???
     'ring',
     'tetrahedron',
     'cone',

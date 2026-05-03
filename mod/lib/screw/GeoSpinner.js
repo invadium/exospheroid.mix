@@ -1,3 +1,4 @@
+// TODO move out to dna/screw
 class GeoSpinner {
 
     constructor(st) {

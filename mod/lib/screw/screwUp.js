@@ -31,6 +31,7 @@ const screwUp = (() => {
           STR  = 3,
           ID   = 4
 
+    let buf = ''
     let lines   // the latest screw srouce splited in lines
 
     function screwBase(N) {

@@ -106,13 +106,13 @@ const ops = [
         }
     },
     // drop
-    //() => { pop() },
+    () => { pop() },
     // swap
-    //() => {
-    //    x = pop(), y = pop()
-    //    s.push(x)
-    //    s.push(y)
-    //},
+    () => {
+        x = pop(), y = pop()
+        s.push(x)
+        s.push(y)
+    },
     // mpush
     () => { m.push( mat4.clone(M) ) },
     // mpop
@@ -127,27 +127,27 @@ const ops = [
     // HPI
     () => { s.push( PI/2 ) },
     // add
-    //() => { s.push( pop() + pop() ) },
+    () => { s.push( pop() + pop() ) },
     // sub
-    //() => {
-    //    x = pop()
-    //    s.push( pop() - x )
-    //},
+    () => {
+        x = pop()
+        s.push( pop() - x )
+    },
     // mul
-    //() => {
-    //    s.push( pop() * pop() )
-    //},
+    () => {
+        s.push( pop() * pop() )
+    },
     // div
-    //() => {
-    //    const x = pop()
-    //    s.push( pop() / x )
-    //},
+    () => {
+        const x = pop()
+        s.push( pop() / x )
+    },
     //precision
     () => { P = pop() },
     // smooth
-    //() => { S = 1 },
+    () => { S = 1 },
     // sharp
-    //() => { S = 0 },
+    () => { S = 0 },
 
     // === modifiers ===
     // mid - set identity matrix
@@ -216,7 +216,6 @@ const ops = [
     },
 
     // === basic geometries ===
-    /*
     // plane
     () => {
         g.v = g.v.concat([
@@ -224,10 +223,8 @@ const ops = [
             -1, 0,-1, -1, 0, 1,  1, 0, 1
         ])
     },
-    */
 
     // === complex geometries ===
-    /*
     // cube
     () => {
         w = [
@@ -271,8 +268,6 @@ const ops = [
         }
         return this
     },
-    */
-    /*
     // sphere
     () => {
         const v = [], w = []
@@ -354,7 +349,6 @@ const ops = [
         }
         g.v = g.v.concat(w)
     },
-    */
     // circle
     () => {
         const v = [], w = []
@@ -400,6 +394,7 @@ const ops = [
     () => { g.name = pop() },
     // brew
     () => {
+        debugger
         // normalize
         g.v = new Float32Array(g.v)
         g.vc = g.v.length / 3
@@ -623,8 +618,7 @@ function unscrew(enops) {
     return exec( unscrewOpcodes( enops.split('') ) )
 }
 
-/*
-if (debug) {
+if (env.config.debug) {
 
     function unscrewOne(enops) {
         return unscrew(enops).pop()
@@ -648,7 +642,6 @@ if (debug) {
 } else {
     return unscrew
 }
-*/
-return unscrew
+// return unscrew
 
 })()
