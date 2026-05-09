@@ -1,4 +1,6 @@
 // mesh generator
+// TODO how to merge these functions with unscrew interpreter? can they be shared?
+//      they are essentially doing the same thing!
 const mesh = (() => {
 
 const flags = {
@@ -107,6 +109,7 @@ function pv3() {
     
 const $ = {
     gen: function() {
+        // TODO should be a class? We defining it in 2 different places
         geo = {
             vertices: [],
             normals:  [],
@@ -115,13 +118,6 @@ const $ = {
             uvs:      [],
 
             BUFFERS: ['vertices', 'normals', 'wires', 'colors', 'uvs'],
-            /*
-            v: [],
-            n: [],
-            f: [],
-            c: [],
-            u: [],
-            */
         }
         return this
     },
@@ -207,6 +203,14 @@ const $ = {
         for (let i = 0; i < w.length; i += 3) {
             rgb(w[i], w[i+1], w[i+2])
         }
+        return this
+    },
+
+    randomColors: function() {
+        for (let i = 0; i < geo.vertices.length / 3; i++) {
+            rgb(rnd(), rnd(), rnd())
+        }
+        return this
     },
 
     uvs: function(uw) {
@@ -543,32 +547,36 @@ const $ = {
             let v1 = vec3.fromArray(geo.vertices, i),
                 v2 = vec3.fromArray(geo.vertices, i+3),
                 v3 = vec3.fromArray(geo.vertices, i+6)
-            vec3.push(geo.wires, v1).push(geo.wires, v2)
-                .push(geo.wires, v2).push(geo.wires, v3)
-                .push(geo.wires, v3).push(geo.wires, v1)
+
+            geo.wires.push(...v1)
+            geo.wires.push(...v2)
+            geo.wires.push(...v2)
+            geo.wires.push(...v3)
+            geo.wires.push(...v3)
+            geo.wires.push(...v1)
         }
         geo.wires = new Float32Array(geo.wires)
 
-        if (geo.uvs.length > 0) {
+        if (geo.uvs && geo.uvs.length > 0) {
             geo.uvs = new Float32Array(geo.uvs)
         } else {
             geo.uvs = null
         }
 
-        if (geo.colors.length > 0) {
+        if (geo.colors && geo.colors.length > 0) {
             geo.colors = new Float32Array(geo.colors)
         } else {
             geo.colors = null
         }
 
-        if (geo.faces.length === 0) {
+        if (!geo.faces || geo.faces.length === 0) {
             geo.faces = null
         } else {
             geo.faces = new Uint16Array(geo.faces)
             geo.facesCount = geo.faces.length
         }
 
-        if (geo.normals.length === 0) {
+        if (!geo.normals || geo.normals.length === 0) {
             geo.autocalcNormals = true
             geo.normals = new Float32Array( lib.gluten.calcNormals(geo.vertices, flags.smooth) ) 
         } else {
@@ -602,6 +610,11 @@ const $ = {
 
     last: function() {
         return geo
+    },
+
+    next: function(g) {
+        geo = g
+        return this
     },
 
     bakeWires: function() {

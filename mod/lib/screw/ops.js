@@ -48,11 +48,11 @@ const opsRef = [
     'brewWires',
 
     // debug ones -- TODO ???
-    'ring',
-    'tetrahedron',
-    'cone',
-    'dump',
-    'dumpv',
+    //'ring',
+    //'tetrahedron',
+    //'cone',
+    //'dump',
+    //'dumpv',
 
     // ghost codes
     // [!] not in the VMs ops manifest

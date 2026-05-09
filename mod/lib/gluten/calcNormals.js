@@ -36,15 +36,17 @@ function calcNormals(v, smooth) {
             v3 = vec3.fromArray(v, i + 6),
             v12 = vec3.isub(v1, v2),
             v13 = vec3.isub(v1, v3),
-            nv = vec3.tnormalize( vec3.icross(v12, v13) )
+            // calculate the normal for the triangle
+            nv = vec3.icross(v12, v13)
 
-        /*
+        // make sure the normal is normalized
+        vec3.normalize(nv, nv)
+
         if (smooth) {
             indexVertex(v1, i,     nv)
             indexVertex(v2, i + 3, nv)
             indexVertex(v3, i + 6, nv)
         }
-        */
 
         // push the same normal for all 3 vertices
         n.push(nv[0], nv[1], nv[2])
@@ -52,7 +54,6 @@ function calcNormals(v, smooth) {
         n.push(nv[0], nv[1], nv[2])
     }
 
-    /*
     if (smooth) {
         for (let i = 0; i < w.length; i++) {
             const leadIndex = w[i]
@@ -70,7 +71,6 @@ function calcNormals(v, smooth) {
             n[i*3+2] = an[2]
         }
     }
-    */
 
     return n
 }

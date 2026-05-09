@@ -78,7 +78,8 @@ function scene() {
             },
             new dna.geo.Surface({
                 name: 'cube',
-                geo: lib.geo.glib.cube,
+                // geo: lib.geo.glib.cube,
+                geo: lib.geo.glib['mod-octahedron'],
                 m: {
                     a: vec4( 0,  0,  1, 1),
                     d: vec4(.1, .8, .9, 0),

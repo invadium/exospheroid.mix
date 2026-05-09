@@ -1,15 +1,23 @@
 // === geo library ===
-const glib = {}, gix = [], dat = {}, dd = [], mlib = {}
+// Accumulates all meshes and materials parsed in this session
+// TODO ability to copy and clean (e.g. multiple parsing sessions, potential namespaces for geosets)
+let geo = {
+    glib: {},
+    gix:  [],
+    dat:  {},
+    dd:   [],
+    mlib: {},
+}
 
 const unscrew = (() => {
 
 // === geo state ===
 let g,                      // current geo form
-    x,y,z,w,                // working registers
+    x, y, z, w,             // working registers
 
-    M = mat4.identity(),    // current geo model matrix
+    M = mat4.identity(),    // current geo model matrix, TODO - move to new mat4
     P = 13,                 // current precision qualifier
-    S                       // smooth flag, sharp if not set
+    _smooth = false         // smooth flag, sharp if not set
 
 let s = [], m = [], b = [] // value and matrix stacks
 
@@ -32,16 +40,16 @@ function popV4() {
 
 // apply a function for each vertice value
 function vxApply(fn) {
-    for (let i = 0; i < g.v.length; i++) {
-        g.v[i] = fn(g.v[i], i)
+    for (let i = 0; i < g.vertices.length; i++) {
+        g.vertices[i] = fn(g.vertices[i], i)
     }
 }
 
 // apply function to x/y/z vertex tripplets
 function v3c(fn) {
-    let swap = true, bv, ln = g.v.length
+    let swap = true, bv, ln = g.vertices.length
     for (let i = 0; i < ln; i += 3) {
-        const x = g.v[i], y = g.v[i+1], z = g.v[i+2]
+        const x = g.vertices[i], y = g.vertices[i+1], z = g.vertices[i+2]
         const v = fn(x, y, z)
         if (swap && i % 9 === 3) {
             bv = v
@@ -63,28 +71,31 @@ function wM(w) {
 
 // apply the geo matrix to vec3 and push the results to vertices
 function v3x(v) {
-    vec3.mulM4(v, M)
-    g.v.push(v[0])
-    g.v.push(v[1])
-    g.v.push(v[2])
+    // vec3.mulM4(v, M)
+    vec3.applyMat4(v, v, M)
+    g.vertices.push(v[0])
+    g.vertices.push(v[1])
+    g.vertices.push(v[2])
 }
 
 // merge x/y/z into a vec3, apply the geo matrix and push the results to vertices
 function vx(x, y, z) {
     const v = vec3(x, y, z)
-    vec3.mulM4(v, M)
-    g.v.push(v[0])
-    g.v.push(v[1])
-    g.v.push(v[2])
+    // vec3.mulM4(v, M)
+    vec3.applyMat4(v, v, M)
+    g.vertices.push(v[0])
+    g.vertices.push(v[1])
+    g.vertices.push(v[2])
 }
 
 // apply geo transformations to nx before pushing in
 function nx(x, y, z) {
     const v = vec3(x, y, z)
-    vec3.mulM4(v, M)
-    g.n.push(v[0])
-    g.n.push(v[1])
-    g.n.push(v[2])
+    // vec3.mulM4(v, M)
+    vec3.applyMat4(v, v, M)
+    g.normals.push(v[0])
+    g.normals.push(v[1])
+    g.normals.push(v[2])
 }
 
 // pop vec3 from the stack
@@ -94,87 +105,64 @@ function pv3() {
 }
 
 const ops = [
-    // neogeo
-    () => {
+    function neogeo() {
         g = {
-            v: [], // vertices
-            n: [], // normals
-            //f: [], // faces 
-            c: [], // colors
-            u: [], // uvs
-            B: ['v', 'n', 'c', 'u'],
+            vertices: [],
+            normals: [],
+            // faces: [],
+            colors: [],
+            uvs: [],
+            BUFFERS: ['vertices', 'normals', 'wires', 'colors', 'uvs'],
         }
     },
-    // drop
-    () => { pop() },
-    // swap
-    () => {
+    function drop() { pop() },
+    function swap() {
         x = pop(), y = pop()
         s.push(x)
         s.push(y)
     },
-    // mpush
-    () => { m.push( mat4.clone(M) ) },
-    // mpop
-    () => { M = m.pop() },
-    // buf - current geometry
-    () => {
-        b = g.v
-        g.v = []
+    function mpush() { m.push( mat4.clone(M) ) },
+    function mpop() { M = m.pop() },
+    // cache current geometry in the buffer
+    function buf() {
+        b = g.vertices
+        g.vertices = []
     },
-    // unbuf
-    () => { wM(b) },
-    // HPI
-    () => { s.push( PI/2 ) },
-    // add
-    () => { s.push( pop() + pop() ) },
-    // sub
-    () => {
+    function unbuf() { wM(b) },
+    // HPI - push half PI
+    function HPI() { s.push( PI/2 ) },
+    function add() { s.push( pop() + pop() ) },
+    function sub() {
         x = pop()
         s.push( pop() - x )
     },
-    // mul
-    () => {
+    function mul() {
         s.push( pop() * pop() )
     },
-    // div
-    () => {
+    function div() {
         const x = pop()
         s.push( pop() / x )
     },
-    //precision
-    () => { P = pop() },
-    // smooth
-    () => { S = 1 },
-    // sharp
-    () => { S = 0 },
+    function precision() { P = pop() },
+    function smooth() { _smooth = true  },
+    function sharp() { _smooth = false },
 
     // === modifiers ===
     // mid - set identity matrix
-    () => { M = mat4.identity() },
-    // mscale
-    () => { mat4.scale(M, pv3()) },
-    // translate
-    () => { mat4.translate(M, pv3()) },
-    // mrotX
-    () => { mat4.rotX(M, pop()) },
-    // mrotY
-    () => { mat4.rotY(M, pop()) },
-    // mrotZ
-    () => { mat4.rotZ(M, pop()) },
-    // reflectX
-    () => { v3c((x, y, z) => vec3(-x, y, z)) },
-    // reflectY
-    () => { v3c((x, y, z) => vec3(x, -y, z)) },
-    // reflectZ
-    () => { v3c((x, y, z) => vec3(x, y, -z)) },
-    // scale
-    () => {
+    function mid() { M = mat4.identity() },
+    function mscale() { mat4.scale(M, pv3()) },
+    function mtranslate() { mat4.translate(M, pv3()) },
+    function mrotX() { mat4.rotX(M, pop()) },
+    function mrotY() { mat4.rotY(M, pop()) },
+    function mrotZ() { mat4.rotZ(M, pop()) },
+    function reflectX() { v3c((x, y, z) => vec3(-x, y, z)) },
+    function reflectY() { v3c((x, y, z) => vec3(x, -y, z)) },
+    function reflectZ() { v3c((x, y, z) => vec3(x, y, -z)) },
+    function scale() {
         x = pop()
         vxApply(n => n * x)
     },
-    // stretch
-    () => {
+    function stretch() {
         z = pop()
         y = pop()
         x = pop()
@@ -185,22 +173,22 @@ const ops = [
 
     // geometry assemblers
     // tri - define a triangle vertex set
-    () => {
+    function tri() {
         for (let i = 0; i < 9; i += 3) {
             z = pop(), y = pop(), x = pop()
             vx(x, y, z)
         }
     },
     // tuv - define a uv coordinates set for the triangle
-    () => {
+    function tuv() {
         for (let i = 0; i < 6; i += 2) {
             y = pop()
-            g.u.push( pop() )
-            g.u.push(y)
+            g.uvs.push( pop() )
+            g.uvs.push(y)
         }
     },
     // mt - define the suggested material
-    () => {
+    function mt() {
         let N, t = 0
         if (typeof peek() === 'string') {
             N = pop()
@@ -212,21 +200,19 @@ const ops = [
             d: popV4(),
             a: popV4(),
         }
-        t? mlib[N] = w : g.m = w
+        t? geo.mlib[N] = w : g.m = w
     },
 
     // === basic geometries ===
-    // plane
-    () => {
-        g.v = g.v.concat([
+    function plane() {
+        g.vertices = g.vertices.concat([
             -1, 0,-1,  1, 0, 1,  1, 0,-1,    
             -1, 0,-1, -1, 0, 1,  1, 0, 1
         ])
     },
 
     // === complex geometries ===
-    // cube
-    () => {
+    function cube() {
         w = [
             // top face
             -1, 1,-1,  -1, 1, 1,   1, 1, 1,
@@ -255,21 +241,20 @@ const ops = [
         wM(w)
 
         if (_gUV) {
-            g.u = g.u.concat([
+            g.uvs = g.uvs.concat([
                 1, 0,   1, 1,   0, 1,
                 1, 0,   0, 1,   0, 0,
             ])
             // apply UVs for each face
             for (let j = 0; j < 12; j++) {
                 for (let i = 0; i < 12; i++) {
-                    g.u.push(g.u[i])
+                    g.uvs.push(g.uvs[i])
                 }
             }
         }
         return this
     },
-    // sphere
-    () => {
+    function sphere() {
         const v = [], w = []
 
         for (let lat = 0; lat <= P; lat++) {
@@ -311,10 +296,9 @@ const ops = [
                 )
             }
         }
-        g.v = g.v.concat(w)
+        g.vertices = g.vertices.concat(w)
     },
-    // cylinder
-    () => {
+    function cylinder() {
         const v = [], w = []
 
         for (let lon = 0; lon < P; lon++) {
@@ -347,10 +331,9 @@ const ops = [
                     v[at],  -1,  v[at+2]
                 )
         }
-        g.v = g.v.concat(w)
+        g.vertices = g.vertices.concat(w)
     },
-    // circle
-    () => {
+    function circle() {
         const v = [], w = []
 
         for (let lon = 0; lon < P; lon++) {
@@ -371,60 +354,60 @@ const ops = [
                 )
         }
         wM(w)
-        //g.v = g.v.concat(w)
+        //g.vertices = g.vertices.concat(w)
         return this
     },
 
     // === finalizer ===
-    // bounds
-    () => { g.bounds = pv3() },
-    // dat - define data array
-    () => {
+    function bounds() { g.bounds = pv3() },
+    // define data array
+    function dat() {
         y = 0
         if (typeof peek() === 'string') {
             x = pop()
             y = 1
         }
         w = [].concat(s)
-        dd.push(w)
-        if (y) dat[x] = w
+        geo.dd.push(w)
+        if (y) geo.dat[x] = w
         s = []
     },
-    // name
-    () => { g.name = pop() },
-    // brew
-    () => {
-        debugger
+    function name() { g.name = pop() },
+    function brew() {
         // normalize
-        g.v = new Float32Array(g.v)
-        g.vc = g.v.length / 3
+        g.vertices = new Float32Array(g.vertices)
+        g.vc = g.vertices.length / 3
 
-        /*
         // DEBUG - generate wireframe points
         // wireframe points
-        g.w = []
-        for (let i = 0; i < g.v.length; i += 9) {
-            let v1 = vec3.fromArray(g.v, i),
-                v2 = vec3.fromArray(g.v, i+3),
-                v3 = vec3.fromArray(g.v, i+6)
+        g.wires = []
+        for (let i = 0; i < g.vertices.length; i += 9) {
+            let v1 = vec3.fromArray(g.vertices, i),
+                v2 = vec3.fromArray(g.vertices, i+3),
+                v3 = vec3.fromArray(g.vertices, i+6)
             //vec3.push(g.w, v1).push(g.w, v2)
             //    .push(g.w, v2).push(g.w, v3)
             //    .push(g.w, v3).push(g.w, v1)
-            vec3.push(g.w, v1)
-            vec3.push(g.w, v2)
-            vec3.push(g.w, v2)
-            vec3.push(g.w, v3)
-            vec3.push(g.w, v3)
-            vec3.push(g.w, v1)
+            // vec3.push(g.w, v1)
+            // vec3.push(g.w, v2)
+            // vec3.push(g.w, v2)
+            // vec3.push(g.w, v3)
+            // vec3.push(g.w, v3)
+            // vec3.push(g.w, v1)
+            g.wires.push(...v1)
+            g.wires.push(...v2)
+            g.wires.push(...v2)
+            g.wires.push(...v3)
+            g.wires.push(...v3)
+            g.wires.push(...v1)
         }
-        g.w = new Float32Array(g.w)
-        */
+        g.wires = new Float32Array(g.wires)
 
-        if (g.u.length > 0) g.u = new Float32Array(g.u)
-        else g.u = null
+        if (g.uvs.length > 0) g.uvs = new Float32Array(g.uvs)
+        else g.uvs = null
 
-        if (g.c.length > 0) g.c = new Float32Array(g.c)
-        else g.c = null
+        if (g.colors.length > 0) g.colors = new Float32Array(g.colors)
+        else g.colors = null
 
         /*
         if (g.f.length === 0) {
@@ -435,15 +418,14 @@ const ops = [
         }
         */
 
-        if (g.n.length === 0) {
-            g.n = new Float32Array( calcNormals(g.v, S) ) 
+        if (g.normals.length === 0) {
+            g.normals = new Float32Array( lib.gluten.calcNormals(g.vertices, _smooth) ) 
         } else {
-            g.n = new Float32Array(g.n) 
+            g.normals = new Float32Array(g.normals) 
         }
 
-        /*
         // DEBUG vertex stat
-        if (debug) {
+        if (env.debug) {
             if (!this.vc) this.vc = 0
             this.vc += g.vc
 
@@ -455,16 +437,16 @@ const ops = [
 
             env.dump['Geometry Library'] = `${this.gc} (${this.pc} polygons)`
         }
-        */
-        gix.push(g)
-        if (g.name) glib[g.name] = g
+
+        geo.gix.push(g)
+        if (g.name) geo.glib[g.name] = g
         brews.push(g)
     },
     // brewWires
-    () => {
-        g.w = new Float32Array(g.v)
-        g.w.vc = g.v.length / 3
-        delete g.v
+    function brewWires() {
+        g.w = new Float32Array(g.vertices)
+        g.w.vc = g.vertices.length / 3
+        delete g.vertices
     },
 ]
 
@@ -497,7 +479,7 @@ function unscrewOpcodes(rawcodes) {
 //       * bump ghost opcodes limit to match PUSHS opcode index
 //       * don't forget to recompile existing snapshots with ./compile-s!
 */
-const PUSHS = 31,
+const PUSHS = 39,
       DEF   = PUSHS + 1,
       END   = PUSHS + 2,
       CALL  = PUSHS + 3,
@@ -507,7 +489,7 @@ function exec(opcodes) {
     const len = opcodes.length
     let op, i = 0, n, buf
     // DEBUG vm
-    //try {
+    try {
         while (i < len) {
             op = opcodes[i++]
 
@@ -515,15 +497,34 @@ function exec(opcodes) {
                 // in definition mode
                 if (op === END) {
                     // definition is done
-                    //console.log('#' + (def.length-1) + ' - NEW WORD IS DEFINED!')
-                    //console.dir(cdef)
-                    //console.log(cdef.map(op => op + '/' + opsRef[op]).join(' '))
+                    console.log('#' + (def.length-1) + ' - NEW WORD IS DEFINED!')
+                    console.dir(cdef)
+                    console.log(cdef.map(op => op + '/' + lib.screw.ops.opsRef[op]).join(' '))
                     cdef = null
                 } else {
                     cdef.push(op)
                     cdef.raw.push(opcodes.raw[i-1])
                 }
             } else {
+
+                if (env.config.debugUnscrew) {
+                    switch(op) {
+                        case PUSHS: log('^pushs');   break;
+                        case DEF:   log('^def');     break;
+                        case CALL:  log('^call');    break;
+                        case PUSHV: log('^pushv');   break;
+
+                        default:
+                            if (op >= PUSHV + 16) {
+                                log('^unscrewing a sequence?')
+                            } else if (op >= PUSHV) {
+                                log('^unscrewing a number???')
+                            } else {
+                                log(`^!${ops[op].name}()`)
+                            }
+                    }
+                }
+
                 switch(op) {
                     case PUSHS:
                         buf = []
@@ -545,9 +546,13 @@ function exec(opcodes) {
                         exec( def[x] )
                         break
 
-                    //case PUSHV:
-                    //    s.push(unscrewNumber(opcodes[i++]))
-                    //    break
+                    /*
+                    // TODO is it needed at all?
+                    case PUSHV:
+                        s.push(unscrewNumber(opcodes[i++]))
+                        break
+                    */
+
                     default:
                         if (op >= PUSHV + 16) {
                             let o = op - PUSHV - 16,
@@ -555,7 +560,7 @@ function exec(opcodes) {
                                 t = o % 4,
                                 c = 93 ** x,
                                 l = opcodes[i++], n, k, j
-                            // console.log(`[!] unscrewing a sequence t:${t}/x:${x} of ${l} elements`)
+                            console.log(`[!] unscrewing a sequence t:${t}/x:${x} of ${l} elements`)
 
                             for (k = 0; k < l; k++) {
                                 n = opcodes[i++]
@@ -565,7 +570,7 @@ function exec(opcodes) {
                                 if (n >= floor(c/2)) n -= c
                                 s.push(n / (10**t))
                                 // DEBUG number parsing
-                                //console.log(`#${k}: ${n/(10**t)}`)
+                                console.log(`#${k}: ${n/(10**t)}`)
                             }
 
                         } else if (op >= PUSHV) {
@@ -594,16 +599,16 @@ function exec(opcodes) {
                 }
             }
         }
-    //} catch(e) {
+    } catch(e) {
         // DEBUG vm
-        //log(`[!!!] ERROR @${i-1}: #${op}/${opsRef[op]}`)
-        //log(opcodes.raw.join(''))
-        //console.dir(opcodes)
-        //log(opcodes.map(op => opsRef[op]).join('\n'))
-        //console.log('definitions:')
-        //console.dir(def)
-        //throw e
-    //}
+        log(`[!!!] ERROR @${i-1}: #${op}/${lib.screw.ops.opsRef[op]}`)
+        log(opcodes.raw.join(''))
+        console.dir(opcodes)
+        log(opcodes.map(op => lib.screw.ops.opsRef[op]).join('\n'))
+        console.log('definitions:')
+        console.dir(def)
+        throw e
+    }
     return brews
 }
 
@@ -618,6 +623,14 @@ function unscrew(enops) {
     return exec( unscrewOpcodes( enops.split('') ) )
 }
 
+function getLibrary() {
+    return geo
+}
+
+function setLibrary(g) {
+    geo = g
+}
+
 if (env.config.debug) {
 
     function unscrewOne(enops) {
@@ -625,6 +638,9 @@ if (env.config.debug) {
     }
 
     extend(unscrew, {
+        getLibrary,
+        setLibrary,
+
         unscrewOne,
         ops,
         cg: () => g,
@@ -640,6 +656,10 @@ if (env.config.debug) {
     return unscrew
 
 } else {
+    extend(unscrew, {
+        getLibrary,
+        setLibrary,
+    })
     return unscrew
 }
 // return unscrew

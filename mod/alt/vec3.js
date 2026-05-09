@@ -1,19 +1,34 @@
-// ===========================
-// 3D Vector Operations
-// ===========================
+// Interface for 3D Vector Operations
 
 // create a new vec3 initialized by provided x,y,z values
+//
+// @param {number/optional} x
+// @param {number/optional} y
+// @param {number/optional} z
+// @returns {Float32Array} a new vec3 array
+function create(x, y, z) {
+    const nv = new Float32Array(3)
+    nv[0] = x ?? 0
+    nv[1] = y ?? 0
+    nv[2] = z ?? 0
+    return nv
+}
+
+// create and register a new 3D vector array
 //
 // @param {number} x
 // @param {number} y
 // @param {number} z
-// @returns {Float32Array} a new vec3 array
-function create(x, y, z) {
+// @param {array/vec2} rv - the receiving 2D vector array
+function xcreate(x, y, z) {
     const nv = new Float32Array(3)
-    nv[0] = x
-    nv[1] = y
-    nv[2] = z
-    return nv
+
+    nv[0] = x ?? 0
+    nv[1] = y ?? 0
+    nv[2] = z ?? 0
+    this.rx = nv
+
+    return this
 }
 
 // set values of a vec3 array components to zero
@@ -97,13 +112,105 @@ function set(rv, x, y, z) {
     return this
 }
 
-function fromArray(buf, i) {
-    return create(
-        buf[i],
-        buf[i+1],
-        buf[i+2],
-    )
+// create a vec3 from the values extracted from the array
+//
+// @param {array} arr - the source array
+// @param {number} offset - the vec3 data offset in the array
+// @returns {array/vec3} - the created 3D vector array
+function fromArray(arr, offset) {
+    offset = offset || 0
+
+    const nv = new Float32Array(3)
+    nv[0] = arr[offset    ]
+    nv[1] = arr[offset + 1]
+    nv[2] = arr[offset + 2]
+    return nv
 }
+
+// get the x coordinate component of a 3D vector array
+//
+// @returns {number} the x component
+function x(iv) {
+    return iv[0]
+}
+
+// get the y coordinate component of a 3D vector array
+//
+// @returns {number} the y component
+function y(iv) {
+    return iv[1]
+}
+
+// get the z coordinate component of a 3D vector array
+//
+// @returns {number} the y component
+function z(iv) {
+    return iv[2]
+}
+
+// get the s texture coordinate component of a 3D vector array
+//
+// @returns {number} the s component
+function s(iv) {
+    return iv[0]
+}
+
+// get the t texture coordinate component of a 3D vector array
+//
+// @returns {number} the t component
+function t(iv) {
+    return iv[1]
+}
+
+// get the p texture coordinate component of a 3D vector array
+//
+// @returns {number} the t component
+function p(iv) {
+    return iv[2]
+}
+
+// get the U texture coordinate component of a 3D vector array
+//
+// @returns {number} the U texture coordinate
+function U(iv) {
+    return iv[0]
+}
+
+// get the V texture coordinate component of a 3D vector array
+//
+// @returns {number} the V texture coordinate
+function V(iv) {
+    return iv[1]
+}
+
+// get the W texture coordinate component of a 3D vector array
+//
+// @returns {number} the W texture coordinate
+function W(iv) {
+    return iv[2]
+}
+
+// get the r RGB-color component of a 3D vector array
+//
+// @returns {number} the r component
+function r(iv) {
+    return iv[0]
+}
+
+// get the g RGB-color component of a 3D vector array
+//
+// @returns {number} the g component
+function g(iv) {
+    return iv[1]
+}
+
+// get the b RGB-color component of a 3D vector array
+//
+// @returns {number} the b component
+function b(iv) {
+    return iv[2]
+}
+
 
 // add two vec3 arrays
 //
@@ -308,6 +415,17 @@ function dot(iv1, iv2) {
     return (iv1[0] * iv2[0] + iv1[1] * iv2[1] + iv1[2] * iv2[2])
 }
 
+// dot product between the source 3D vector and the components of another 3D vector
+//
+// @param {array/vec3} iv1 - the first 3D vector operand
+// @param {number} x - the second 3D vector x component
+// @param {number} y - the second 3D vector y component
+// @param {number} z - the second 3D vector z component
+// @returns {number} the dot product
+function cdot(iv, x, y, z) {
+    return (iv[0] * x  +  iv[1] * y  +  iv[2] * z)
+}
+
 // cross product of two 3D vectors
 //
 // Returns a 3D vector array that is perpendicular to both source 3D vectors
@@ -329,7 +447,7 @@ function cross(rv, iv1, iv2) {
 
 // cross product of two 3D vectors into a new 3D vector array
 //
-// Returns a 3D vector array that is perpendicular to both source 2D vectors
+// Returns a 3D vector array that is perpendicular to both source 3D vectors
 // and therefore normal to the plane containing those two vectors.
 //
 // @param {array/vec3} iv1 - the first 3D vector array (immutable)
@@ -396,6 +514,35 @@ function ishrink(iv, scalar) {
     nv[0] = iv[0] * nfactor
     nv[1] = iv[1] * nfactor
     nv[2] = iv[2] * nfactor
+    return nv
+}
+
+// magnify the second 3D vector array by a scalar value and add the result to the first 3D vector
+//
+// @param {array/vec3} rv - the receiving 3D vector array
+// @param {array/vec3} iv1 - the source 3D vector to add to
+// @param {array/vec3} iv2 - the source 3D vector to scale
+// @param {number} scalar
+// @returns {obj/lib/vec3} vec3 library object for chaining
+function scaleAndAdd(rv, iv1, iv2, scalar) {
+    rv[0] = iv1[0] + iv2[0] * scalar
+    rv[1] = iv1[1] + iv2[1] * scalar
+    rv[2] = iv1[2] + iv2[2] * scalar
+    return this
+}
+
+// magnify the second 3D vector array by a scalar value and add to the first 3D vector
+// into a new vector
+//
+// @param {array/vec3} iv1 - the source 3D vector to add to
+// @param {array/vec3} iv2 - the source 3D vector to scale
+// @param {number} scalar
+// @returns {array/vec3} the created output 3D vector array
+function iscaleAndAdd(iv1, iv2, scalar) {
+    const nv = new Float32Array(3)
+    nv[0] = iv1[0] + iv2[0] * scalar
+    nv[1] = iv1[1] + iv2[1] * scalar
+    nv[2] = iv1[2] + iv2[2] * scalar
     return nv
 }
 
@@ -563,27 +710,6 @@ function inormalize(iv) {
     return nv
 }
 
-// normalize provided 3D vector
-//
-// @param {array/vec3} tv - the target 3D vector
-// @returns {obj/lib/vec3} vec3 library object for chaining
-function tnormalize(tv) {
-    const x = tv[0], y = tv[1], z = tv[2]
-    const len2 = x*x + y*y + z*z
-    if (len2 > 0) {
-        const nfactor = 1 / Math.sqrt(len2)
-        tv[0] = x * nfactor
-        tv[1] = y * nfactor
-        tv[2] = z * nfactor
-    } else {
-        // no direction information in the original vec3
-        tv[0] = 0
-        tv[1] = 0
-        tv[2] = 0
-    }
-    return tv
-}
-
 
 // rotate a 3D vector around the x-axis
 //
@@ -685,6 +811,111 @@ function angle(iv1, iv2) {
     return Math.acos( Math.min( Math.max(cosine, -1), 1 ) )
 }
 
+// transform the 3D vector with the provided transformation mat3 into the receiving 3D vector array
+//
+// @param {array/vec3} rv - the receiving 3D vector array
+// @param {array/vec3} iv - the source 3D vector array
+// @param {array/mat3} tm - the transformation 3x3 matrix array
+// @returns {obj/lib/vec3} vec3 library object
+function applyMat3(rv, iv, tm) {
+    const x = iv[0], y = iv[1], z = iv[2]
+
+    rv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]
+    rv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]
+    rv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]
+
+    return this
+}
+
+// transform the 3D vector with the provided transformation mat3 into a new 3D vector array
+//
+// @param {array/vec3} iv - the source 3D vector array
+// @param {array/mat3} tm - the transformation 3x3 matrix array
+// @returns {obj/vec3} the newly created 3D vector array
+function iapplyMat3(iv, tm) {
+    const nv = new Float32Array(3)
+    const x = iv[0], y = iv[1], z = iv[2]
+
+    nv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]
+    nv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]
+    nv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]
+
+    return nv
+}
+
+// transform the 3D vector with the provided transformation mat43 into the receiving 3D vector array
+//
+// TODO figure out if we need to factor [w !== 1] in this case
+//
+// @param {array/vec3} rv - the receiving 3D vector array
+// @param {array/vec3} iv - the source 3D vector array
+// @param {array/mat43} tm - the transformation 4x3 matrix array
+// @returns {obj/lib/vec3} vec3 library object
+function applyMat43(rv, iv, tm) {
+    const x = iv[0], y = iv[1], z = iv[2]
+
+    rv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]  +  tm[9 ]
+    rv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]  +  tm[10]
+    rv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]  +  tm[11]
+
+    return this
+}
+
+// transform the 3D vector with the provided transformation mat43 into a new 3D vector array
+//
+// @param {array/vec3} iv - the source 3D vector array
+// @param {array/mat43} tm - the transformation 4x3 matrix array
+// @returns {obj/vec3} the newly created 3D vector array
+function iapplyMat43(iv, tm) {
+    const nv = new Float32Array(3)
+    const x = iv[0], y = iv[1], z = iv[2]
+
+    nv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]  +  tm[9 ]
+    nv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]  +  tm[10]
+    nv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]  +  tm[11]
+
+    return nv
+}
+
+// transform the 3D vector with the provided transformation mat4 into the receiving 3D vector array
+//
+// @param {array/vec3} rv - the receiving 3D vector array
+// @param {array/vec3} iv - the source 3D vector array
+// @param {array/mat4} tm - the transformation 4x4 matrix array
+// @returns {obj/lib/vec3} vec3 library object
+function applyMat4(rv, iv, tm) {
+    const x = iv[0], y = iv[1], z = iv[2],
+          w = (x * tm[3]  +  y * tm[7]  +  z * tm[11]  +   tm[15]) || 1,
+          iw = 1/w
+
+    rv[0] = (x * tm[0]  +  y * tm[4]  +  z * tm[8 ]  +  tm[12]) * iw
+    rv[1] = (x * tm[1]  +  y * tm[5]  +  z * tm[9 ]  +  tm[13]) * iw
+    rv[2] = (x * tm[2]  +  y + tm[6]  +  z * tm[10]  +  tm[14]) * iw
+
+    return this
+}
+
+// transform the 3D vector with the provided transformation mat4 into a new 3D vector array
+//
+// @param {array/vec3} iv - the source 3D vector array
+// @param {array/mat4} tm - the transformation 4x4 matrix array
+// @returns {obj/vec3} the newly created 3D vector array
+function iapplyMat4(iv, tm) {
+    const nv = new Float32Array(3)
+    const x = iv[0], y = iv[1], z = iv[2],
+          w = (x * tm[3]  +  y * tm[7]  +  z * tm[11]  +   tm[15]) || 1,
+          iw = 1/w
+
+    nv[0] = (x * tm[0]  +  y * tm[4]  +  z * tm[8 ]  +  tm[12]) * iw
+    nv[1] = (x * tm[1]  +  y * tm[5]  +  z * tm[9 ]  +  tm[13]) * iw
+    nv[2] = (x * tm[2]  +  y + tm[6]  +  z * tm[10]  +  tm[14]) * iw
+
+    return nv
+}
+
+// TODO apply only rotation or translation part of mat4/mat43
+// ...
+
 // linear interpolation between two 3D vectors
 //
 // @param {array/vec3} rv - the receiving 2D vector array
@@ -720,6 +951,28 @@ function distSq(iv1, iv2) {
     const dz = iv1[2] - iv2[2]
     return (dx * dx + dy * dy + dz * dz)
 }
+
+// euclidian distance between two 3D vectors
+//
+// @param {array/vec3} iv1 - the first operand (immutable)
+// @param {array/vec3} iv2 - the second operand (immutable)
+// @returns {number} euclidian distance between iv1 and iv2
+function __distance__(iv1, iv2) {
+    return Math.hypot(iv1[0] - iv2[0], iv1[1] - iv2[1], iv1[2] - iv2[2])
+}
+
+// squared euclidian distance between two 3D vectors
+//
+// @param {array/vec3} iv1 - the first operand (immutable)
+// @param {arrayvec3} iv2 - the second operand (immutable)
+// @returns {number} squared euclidian distance between iv1 and iv2
+function distanceSq(iv1, iv2) {
+    const dx = iv1[0] - iv2[0]
+    const dy = iv1[1] - iv2[1]
+    const dz = iv1[2] - iv2[2]
+    return (dx * dx + dy * dy + dz * dz)
+}
+
 
 
 // magnitude(length) of a 3D vector
@@ -774,6 +1027,12 @@ function isetMag(iv, mag) {
 
 // length(magnitude) of a 3D vector
 //
+// _API Note: We can't provide the .length() alias
+// due to the existing .length() method on every function object.
+// Don't be misled by the presence of .length() in vec2 -
+// it doesn't return a vector length, but the length of
+// the function's argument list._
+//
 // @param {array/vec3/immutable} iv - the source 3D vector
 // @returns {number} the length(magnitude) of the provided 3D vector
 function len(iv) {
@@ -804,7 +1063,7 @@ function equals(iv1, iv2) {
 // @param {number} epsilon - (optional) precision factor for near-comparison
 // @returns {boolean} true if vectors components are near-equal, false otherwise
 function near(iv1, iv2, epsilon) {
-    epsilon = epsilon || EPSILON
+    epsilon = epsilon ?? EPSILON
     const x1 = iv1[0], y1 = iv1[1], z1 = iv1[2]
     const x2 = iv2[0], y2 = iv2[1], z2 = iv2[2]
     return (
@@ -814,25 +1073,127 @@ function near(iv1, iv2, epsilon) {
     )
 }
 
-function push(buf, v) {
-    buf.push(v[0], v[1], v[2])
+// map a 3D vector array into a target object with optional names
+//
+// @param {object} tar - the target object to map vec3 values into
+// @param {array/vec3/immutable} iv - the source 3D vector
+// @param {string} xn - optional property name for the x component ("x" by default)
+// @param {string} yn - optional property name for the y component ("y" by default)
+// @param {string} zn - optional property name for the z component ("z" by default)
+// @returns {obj/lib/vec3} vec3 library object for chaining
+function map(tar, iv, xn, yn, zn) {
+    xn = xn || 'x'
+    yn = yn || 'y'
+    zn = zn || 'z'
+
+    tar[xn] = iv[0]
+    tar[yn] = iv[1]
+    tar[zn] = iv[2]
+
     return this
 }
 
-// get a 3D vector array string dump
+// map a 3D vector array into the new target object with optional names
 //
 // @param {array/vec3/immutable} iv - the source 3D vector
-// @returns {string} the 3D vector string representation
-function str(iv) {
-    return `vec3[${iv[0]}, ${iv[1]}, ${iv[2]}]`
+// @param {string} xn - optional property name for the x component ("x" by default)
+// @param {string} yn - optional property name for the y component ("y" by default)
+// @param {string} yn - optional property name for the z component ("z" by default)
+// @returns {obj} created object with mapped 3D vector values
+function imap(iv, xn, yn, zn) {
+    const out = {}
+    xn = xn || 'x'
+    yn = yn || 'y'
+    zn = zn || 'z'
+
+    out[xn] = iv[0]
+    out[yn] = iv[1]
+    out[zn] = iv[2]
+
+    return out
+}
+
+// decode (deconstruct) an object with 3D vector data into the target 3D vector array
+//
+// @param {array/vec3} rv - the receiving 3D vector array
+// @param {object} io - the input object with 3D vector data
+// @param {string} nx - the optional property name for the 'x' value
+// @param {string} ny - the optional property name for the 'y' value
+// @param {string} nz - the optional property name for the 'z' value
+// @returns {obj/lib/vec3} vec3 library object for chaining
+function decode(rv, io, nx, ny, nz) {
+    nx = nx ?? 'x'
+    ny = ny ?? 'y'
+    nz = nz ?? 'z'
+
+    rv[0] = io[nx] ?? rv[0]
+    rv[1] = io[ny] ?? rv[1]
+    rv[2] = io[nz] ?? rv[2]
+
+    return this
+}
+
+// decode (deconstruct) an object with 3D vector data into the new 3D vector array
+//
+// @param {object} io - the input object with 3D vector data
+// @param {string} nx - the optional property name for the 'x' value
+// @param {string} ny - the optional property name for the 'y' value
+// @param {string} nz - the optional property name for the 'z' value
+// @returns {array} created 3D vector array with deconstructed data
+function idecode(io, nx, ny, nz) {
+    const nv = new Float32Array(3)
+
+    nx = nx ?? 'x'
+    ny = ny ?? 'y'
+    nz = nz ?? 'z'
+
+    nv[0] = io[nx] ?? 0
+    nv[1] = io[ny] ?? 0
+    nv[2] = io[nz] ?? 0
+
+    return nv
+}
+
+// transform a 3D vector into an object {x, y, z}
+// 
+// @param {array/vec3/immutable} iv - the source 3D vector
+// @returns {object} the transformed object with {x, y, z} coordinates defined
+function obj(iv) {
+    return {
+        x: iv[0],
+        y: iv[1],
+        z: iv[2]
+    }
 }
 
 // get 3D vector array string representation
 //
 // @param {array/vec3/immutable} iv - the source 3D vector
 // @returns {string} the string with 3D vector array data
-function toString(iv) {
-    return `[${iv[0]}, ${iv[1]}, ${iv[2]}]`
+function str(iv) {
+    return `${iv[0]}, ${iv[1]}, ${iv[2]}`
+}
+
+// get a 3D vector array formatted string representation
+//
+// @param {array/vec3/immutable} iv - the source 3D vector
+// @param {string} s - optional separator
+// @param {string} p - optional prefix
+// @param {string} x - optional suffix
+// @returns {string} the formatted 3D vector string
+function fmt(iv, s, p, x) {
+    s = s ?? ', '
+    p = p ?? '['
+    x = x ?? ']'
+    return `${p}${iv[0]}${s}${iv[1]}${s}${iv[2]}${x}`
+}
+
+// get a 3D vector array string dump
+//
+// @param {array/vec3/immutable} iv - the source 3D vector
+// @returns {string} the 3D vector string representation
+function dump(iv) {
+    return `vec3[${iv[0]}, ${iv[1]}, ${iv[2]}]`
 }
 
 // validate a 3D vector
@@ -850,6 +1211,8 @@ function validate(iv) {
 }
 
 // assert a 3D vector, throws an error when the vector is malformed
+//
+// Any 3D vector is required to have 3 number components.
 //
 // @param {array/vec3} iv - the source 3D vector
 // @returns {obj/lib/vec3} vec3 library object for chaining
@@ -906,7 +1269,10 @@ function vec3(x, y, z) {
 }
 
 extend(vec3, {
+    rx: create(),
+
     create,
+    xcreate,
     zero,
     izero,
     unit,
@@ -914,7 +1280,12 @@ extend(vec3, {
     clone,
     copy,
     set,
+    from: create,
     fromArray,
+    x, y, z,
+    s, t, p,
+    U, V, W,
+    r, g, b,
 
     add,
     iadd,
@@ -929,10 +1300,14 @@ extend(vec3, {
     idiv,
     cdiv,
     dot,
+    cdot,
     cross,
     icross,
+
     scale: __scale__,
     iscale,
+    scaleAndAdd,
+    iscaleAndAdd,
     shrink,
     ishrink,
     shift,
@@ -949,7 +1324,6 @@ extend(vec3, {
     iround: iround,
     normalize,
     inormalize,
-    tnormalize,
 
     rotateX,
     irotateX,
@@ -958,6 +1332,12 @@ extend(vec3, {
     rotateZ,
     irotateZ,
     angle,
+    applyMat3,
+    iapplyMat3,
+    applyMat43,
+    iapplyMat43,
+    applyMat4,
+    iapplyMat4,
 
     lerp: __lerp__,
     // hermite interpolation
@@ -965,6 +1345,8 @@ extend(vec3, {
     // bearing
     dist,
     distSq,
+    distance: __distance__,
+    distanceSq: distanceSq,
     
     mag,
     setMag,
@@ -974,10 +1356,14 @@ extend(vec3, {
     equals,
     near,
 
-    push,
-
+    map,
+    imap,
+    decode,
+    idecode,
+    obj,
     str,
-    toString,
+    fmt,
+    dump,
     validate,
     assert: __assert__,
 })
