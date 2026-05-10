@@ -1,4 +1,5 @@
 // a lab frame with convenient _traits and _pods installation routines in the constructor
+// TODO refactor it out - a regular lab frame should do the trick for the most part
 class EntityFrame extends sys.LabFrame {
 
     constructor(st) {

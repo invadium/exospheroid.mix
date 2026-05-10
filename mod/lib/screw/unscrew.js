@@ -565,8 +565,10 @@ function exec(opcodes) {
                                 t = o % 4,
                                 c = 93 ** x,
                                 l = opcodes[i++], n, k, j
-                            console.log(`[!] unscrewing a sequence t:${t}/x:${x} of ${l} elements`)
 
+                            if (env.config.debugUnscrew) {
+                                console.log(`[!] unscrewing a sequence t:${t}/x:${x} of ${l} elements`)
+                            }
                             for (k = 0; k < l; k++) {
                                 n = opcodes[i++]
                                 for (j = 1; j < x; j++) {
@@ -575,7 +577,9 @@ function exec(opcodes) {
                                 if (n >= floor(c/2)) n -= c
                                 s.push(n / (10**t))
                                 // DEBUG number parsing
-                                console.log(`#${k}: ${n/(10**t)}`)
+                                if (env.config.debugUnscrew) {
+                                    console.log(`#${k}: ${n/(10**t)}`)
+                                }
                             }
 
                         } else if (op >= PUSHV) {
