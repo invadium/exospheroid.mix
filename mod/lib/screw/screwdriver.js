@@ -1,7 +1,7 @@
-// mesh generator
+// geometry (mesh/material/data) direct generator
 // TODO how to merge these functions with unscrew interpreter? can they be shared?
 //      they are essentially doing the same thing!
-const mesh = (() => {
+const screwdriver = (() => {
 
 const flags = {
     UV:     true,

@@ -1,12 +1,12 @@
 function geometry() {
 
     // generate meshes
-    const mesh = lib.screw.mesh
+    const sd = lib.screw.screwdriver
 
     // here we screw up some meshes
-    mesh.gen().cube().push(.5).scale().randomColors()
+    sd.gen().cube().push(.5).scale().randomColors()
     // bake the mesh
-    mesh.push('cube').label().bake()
+    sd.push('cube').label().bake()
 
     // lets try to use the screwup compiler
     // TODO something is off with the compile-decompile sequence
@@ -24,11 +24,11 @@ function geometry() {
     
     let g = lib.geoLibrary.mesh.selectOne('cubeOne')
     g.colors = []
-    mesh.next( g ).randomColors().bake()
+    sd.next( g ).randomColors().bake()
 
     g = lib.geoLibrary.mesh.selectOne('octahedron')
     g.colors = []
-    mesh.next( g ).randomColors().bake()
+    sd.next( g ).randomColors().bake()
 
     // const res2 = lib.screw.unscrew.unscrewOne(runes)
     // dir(res2)
