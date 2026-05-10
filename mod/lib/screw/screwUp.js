@@ -234,6 +234,7 @@ const screwUp = (() => {
                 case '-':
                     const n = inext('-'), nl = lnext()
                     if (n > 0) {
+                        // one-line comment
                         skipLine()
                     } else {
                         // just a sing

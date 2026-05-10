@@ -1,0 +1,129 @@
+=== kube geometry ===
+kube:
+
+-- define x2 top faces at Y=1
+-1  1 -1
+ 1  1  1
+-1  1  1
+
+-1  1 -1
+ 1  1 -1
+ 1  1  1
+
+tri tri
+
+reflectY   -- reflect Y coordinates against XZ-plane
+mpush      -- store current model matrix
+buf        -- buffer previously generated vertices
+
+
+HPI mrotY -- rotate HALF_PI around OY-axis
+unbuf
+====
+
+HPI mrotZ
+unbuf
+
+mpop
+unbuf
+====
+;
+---------------------
+
+
+=== Octahedron ===
+neogeo
+
+mpush
+0.5 0.5 0.5 mscale
+
+0  -1   0
+0   0  -2
+-2  0   0
+tri
+0  -1   0
+0   0  -2
+2   0   0
+tri
+0  -1   0
+0   0   5
+2   0   0
+tri
+0  -1   0
+0   0   5
+-2  0   0
+tri
+
+0   1   0
+-2  0   0
+0   0  -2
+tri
+0   1   0
+0   0  -2
+2   0   0
+tri
+0   1   0
+0   0   5
+2   0   0
+tri
+0   1   0
+0   0   5
+-2  0   0
+tri
+
+"modifiedOctahedron" name
+brew
+mpop
+------------------------
+
+neogeo kube "cubeOne" name brew
+-- neogeo kube 1 scale "cubeTwo" name brew
+-- neogeo kube 2 scale "cubeThree" name brew
+
+-- neogeo sphere "simpleSphereOne" name brew
+-- neogeo smooth sphere "simpleSphereOne" name brew
+-- neogeo cylinder "simpleCylinderOne" name brew
+-- neogeo sharp cylinder "simpleCylinderOne" name brew
+
+
+-- mpush mid   -- push identity matrix
+-- neogeo kube "KubeOne" name brew
+-- mpop
+
+
+
+
+---------------------------------------
+--- cube geometry ---
+kube:
+
+mpush mid
+-1  1 -1
+ 1  1  1
+-1  1  1
+
+-1  1 -1
+ 1  1 -1
+ 1  1  1
+
+tri tri
+
+----------------------------
+reflectY
+
+mpush
+buf
+
+HPI mrotY
+unbuf
+
+HPI mrotZ
+unbuf
+
+mpop
+unbuf
+------------------------------
+"DONE"
+mpop
+;
+---------------------------------------

@@ -1,4 +1,5 @@
-function geo() {
+function geometry() {
+    // generate meshes
     const mesh = lib.screw.mesh
 
     // here we screw up some meshes
@@ -12,16 +13,23 @@ function geo() {
     //      but never gets into the brew/bake routine
     //      presumably because of the bytecode mismatch
     //      after heavy js13k optimizations
-    const runes = lib.screw.screwUp(lib.screwUp.shape)
-
     lib.screw.unscrew.setLibrary(lib.geo)
-    const res = lib.screw.unscrew(runes)
+
+    lib.screw.unscrew( lib.screw.screwUp(lib.screwUp.cube) )
+    lib.screw.unscrew( lib.screw.screwUp(lib.screwUp.octahedron) )
+
+    // const r2 = lib.screw.screwUp(lib.screwUp.simple)
+    // lib.screw.unscrew(r2)
     
-    const g = lib.geo.glib['mod-octahedron']
+    let g = lib.geo.glib['cubeOne']
     g.colors = []
-    mesh.next( lib.geo.glib['mod-octahedron'] ).randomColors().bake()
+    mesh.next( g ).randomColors().bake()
+
+    g = lib.geo.glib['octahedron']
+    g.colors = []
+    mesh.next( g ).randomColors().bake()
 
     // const res2 = lib.screw.unscrew.unscrewOne(runes)
     // dir(res2)
 }
-geo.Z = 11
+geometry.Z = 11

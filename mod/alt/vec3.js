@@ -822,7 +822,7 @@ function applyMat3(rv, iv, tm) {
 
     rv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]
     rv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]
-    rv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]
+    rv[2] = x * tm[2]  +  y * tm[5]  +  z * tm[8]
 
     return this
 }
@@ -838,7 +838,7 @@ function iapplyMat3(iv, tm) {
 
     nv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]
     nv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]
-    nv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]
+    nv[2] = x * tm[2]  +  y * tm[5]  +  z * tm[8]
 
     return nv
 }
@@ -856,7 +856,7 @@ function applyMat43(rv, iv, tm) {
 
     rv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]  +  tm[9 ]
     rv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]  +  tm[10]
-    rv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]  +  tm[11]
+    rv[2] = x * tm[2]  +  y * tm[5]  +  z * tm[8]  +  tm[11]
 
     return this
 }
@@ -872,7 +872,7 @@ function iapplyMat43(iv, tm) {
 
     nv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]  +  tm[9 ]
     nv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]  +  tm[10]
-    nv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]  +  tm[11]
+    nv[2] = x * tm[2]  +  y * tm[5]  +  z * tm[8]  +  tm[11]
 
     return nv
 }
@@ -890,7 +890,7 @@ function applyMat4(rv, iv, tm) {
 
     rv[0] = (x * tm[0]  +  y * tm[4]  +  z * tm[8 ]  +  tm[12]) * iw
     rv[1] = (x * tm[1]  +  y * tm[5]  +  z * tm[9 ]  +  tm[13]) * iw
-    rv[2] = (x * tm[2]  +  y + tm[6]  +  z * tm[10]  +  tm[14]) * iw
+    rv[2] = (x * tm[2]  +  y * tm[6]  +  z * tm[10]  +  tm[14]) * iw
 
     return this
 }
@@ -908,7 +908,7 @@ function iapplyMat4(iv, tm) {
 
     nv[0] = (x * tm[0]  +  y * tm[4]  +  z * tm[8 ]  +  tm[12]) * iw
     nv[1] = (x * tm[1]  +  y * tm[5]  +  z * tm[9 ]  +  tm[13]) * iw
-    nv[2] = (x * tm[2]  +  y + tm[6]  +  z * tm[10]  +  tm[14]) * iw
+    nv[2] = (x * tm[2]  +  y * tm[6]  +  z * tm[10]  +  tm[14]) * iw
 
     return nv
 }

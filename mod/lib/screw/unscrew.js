@@ -65,7 +65,7 @@ function v3c(fn) {
 // apply current model matrix to provided array and push values
 function wM(w) {
     for (let i = 0; i < w.length; i += 3) {
-        v3x(vec3(w[i], w[i+1], w[i+2]))
+        v3x( vec3(w[i], w[i+1], w[i+2]) )
     }
 }
 
@@ -104,6 +104,14 @@ function pv3() {
     return vec3(x, y, z)
 }
 
+function dumpVM() {
+    log('=== VM DUMP ===')
+    dir(g)
+    log(`regs -- x:${x}, y:${y}, z:${z}, w:${w}`)
+    log('current model matrix:')
+    dir(M)
+}
+
 const ops = [
     function neogeo() {
         g = {
@@ -128,7 +136,9 @@ const ops = [
         b = g.vertices
         g.vertices = []
     },
-    function unbuf() { wM(b) },
+    function unbuf() {
+        wM(b)
+    },
     // HPI - push half PI
     function HPI() { s.push( PI/2 ) },
     function add() { s.push( pop() + pop() ) },
@@ -156,7 +166,9 @@ const ops = [
     function mrotY() { mat4.rotY(M, pop()) },
     function mrotZ() { mat4.rotZ(M, pop()) },
     function reflectX() { v3c((x, y, z) => vec3(-x, y, z)) },
-    function reflectY() { v3c((x, y, z) => vec3(x, -y, z)) },
+    function reflectY() {
+        v3c((x, y, z) => vec3(x, -y, z))
+    },
     function reflectZ() { v3c((x, y, z) => vec3(x, y, -z)) },
     function scale() {
         x = pop()

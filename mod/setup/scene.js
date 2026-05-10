@@ -14,6 +14,7 @@ function scene() {
     })
     lab.port.bindCamera(cam)
 
+    /*
     // spawn a running away geometry
     const plane = lab.port.spawn(dna.geo.debug.Plane, {
         Z:         101,
@@ -36,6 +37,7 @@ function scene() {
         },
     })
     plane.evo(0.01)
+    */
 
     /*
     lab.port.attach( new dna.geo.Surface({
@@ -79,7 +81,8 @@ function scene() {
             new dna.geo.Surface({
                 name: 'cube',
                 // geo: lib.geo.glib.cube,
-                geo: lib.geo.glib['mod-octahedron'],
+                // geo: lib.geo.glib['mod-octahedron'],
+                geo: lib.geo.glib['octahedron'],
                 m: {
                     a: vec4( 0,  0,  1, 1),
                     d: vec4(.1, .8, .9, 0),
