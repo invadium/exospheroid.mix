@@ -1,13 +1,6 @@
 // === geo library ===
 // Accumulates all meshes and materials parsed in this session
-// TODO ability to copy and clean (e.g. multiple parsing sessions, potential namespaces for geosets)
-let geo = {
-    glib: {},
-    gix:  [],
-    dat:  {},
-    dd:   [],
-    mlib: {},
-}
+let library
 
 const unscrew = (() => {
 
@@ -212,7 +205,8 @@ const ops = [
             d: popV4(),
             a: popV4(),
         }
-        t? geo.mlib[N] = w : g.m = w
+        // define in global space or as a local geometry material
+        t? library.attachMaterial(w) : g.m = w
     },
 
     // === basic geometries ===
@@ -380,8 +374,8 @@ const ops = [
             y = 1
         }
         w = [].concat(s)
-        geo.dd.push(w)
-        if (y) geo.dat[x] = w
+        if (y) w.name = x
+        library.attachData(w)
         s = []
     },
     function name() { g.name = pop() },
@@ -450,8 +444,7 @@ const ops = [
             env.dump['Geometry Library'] = `${this.gc} (${this.pc} polygons)`
         }
 
-        geo.gix.push(g)
-        if (g.name) geo.glib[g.name] = g
+        library.attachMesh(g)
         brews.push(g)
     },
     // brewWires
@@ -639,8 +632,8 @@ function getLibrary() {
     return geo
 }
 
-function setLibrary(g) {
-    geo = g
+function setLibrary(l) {
+    library = l
 }
 
 if (env.config.debug) {

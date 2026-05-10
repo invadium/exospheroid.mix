@@ -597,9 +597,8 @@ const $ = {
             env.dump['Geometry Library'] = `${this._geoCount} (${this._polygonCount} polygons)`
         }
 
-        lib.geo.cur = geo
-        lib.geo.gix.push(geo)
-        if (geo.name) lib.geo.glib[geo.name] = geo
+        // lib.geo.cur = geo // TODO do we have any reasone to preserve that as current in the lib?
+        lib.geoLibrary.attachMesh(geo)
         return this
     },
 

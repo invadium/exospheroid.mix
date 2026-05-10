@@ -82,7 +82,8 @@ function scene() {
                 name: 'cube',
                 // geo: lib.geo.glib.cube,
                 // geo: lib.geo.glib['mod-octahedron'],
-                geo: lib.geo.glib['octahedron'],
+                // geo: lib.geo.glib['octahedron'],
+                geo: lib.geoLibrary.mesh.selectOne('octahedron'),
                 m: {
                     a: vec4( 0,  0,  1, 1),
                     d: vec4(.1, .8, .9, 0),

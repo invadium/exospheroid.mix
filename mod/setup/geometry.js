@@ -1,4 +1,7 @@
 function geometry() {
+    // create the library
+    lib.attach( new dna.geo.GeoLibrary() )
+
     // generate meshes
     const mesh = lib.screw.mesh
 
@@ -13,7 +16,7 @@ function geometry() {
     //      but never gets into the brew/bake routine
     //      presumably because of the bytecode mismatch
     //      after heavy js13k optimizations
-    lib.screw.unscrew.setLibrary(lib.geo)
+    lib.screw.unscrew.setLibrary(lib.geoLibrary)
 
     lib.screw.unscrew( lib.screw.screwUp(lib.screwUp.cube) )
     lib.screw.unscrew( lib.screw.screwUp(lib.screwUp.octahedron) )
@@ -21,11 +24,11 @@ function geometry() {
     // const r2 = lib.screw.screwUp(lib.screwUp.simple)
     // lib.screw.unscrew(r2)
     
-    let g = lib.geo.glib['cubeOne']
+    let g = lib.geoLibrary.mesh.selectOne('cubeOne')
     g.colors = []
     mesh.next( g ).randomColors().bake()
 
-    g = lib.geo.glib['octahedron']
+    g = lib.geoLibrary.mesh.selectOne('octahedron')
     g.colors = []
     mesh.next( g ).randomColors().bake()
 
