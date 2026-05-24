@@ -1,6 +1,6 @@
 const EntityFrame = require('dna/EntityFrame')
 
-// represents a visible form with position, rotation and scale
+// a transformation node ewith position, rotation and scale
 class Form extends EntityFrame {
 
     constructor(st) {

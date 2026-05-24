@@ -1,3 +1,4 @@
+// represents a collection of meshes, materials and associated user data 
 class GeoLibrary extends sys.Frame {
 
     constructor(st) {

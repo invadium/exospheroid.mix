@@ -53,7 +53,7 @@ function scene() {
     }))
     */
 
-    const cuboid = lab.port.attach( new dna.geo.Form({
+    const cuboid = lab.port.attach( new dna.shape.Form({
         name: 'cuboid',
         pos: vec3(0, 0, 0),
         rot: vec3(0, 0, 0),
@@ -78,7 +78,7 @@ function scene() {
                     //__.pos[1] += 2 * dt
                 },
             },
-            new dna.geo.Surface({
+            new dna.shape.Surface({
                 name: 'cube',
                 // geo: lib.geo.glib.cube,
                 // geo: lib.geo.glib['mod-octahedron'],

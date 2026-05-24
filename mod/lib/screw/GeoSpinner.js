@@ -1,3 +1,4 @@
+// Legacy core UI component of Corkscrew
 // TODO move out to dna/screw
 class GeoSpinner {
 

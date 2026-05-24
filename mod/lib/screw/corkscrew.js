@@ -1,3 +1,4 @@
+// Legacy Corkscrew Web UI
 let corkscrew = (function(window) {
 
     let lastScript

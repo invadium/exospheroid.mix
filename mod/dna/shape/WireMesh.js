@@ -1,6 +1,6 @@
 let id = 0
 
-class WireMesh extends dna.geo.Surface {
+class WireMesh extends dna.shape.Surface {
 
     constructor(st) {
         super( augment({

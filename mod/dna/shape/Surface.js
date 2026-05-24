@@ -1,5 +1,5 @@
 // Surface combines the geometry mesh data and materials to create
-// a renderable surface
+// a renderable surface along with render configuration data.
 
 let id = 0
 
@@ -93,7 +93,6 @@ class Surface {
     }
 
     postDraw() {
-
     }
 
     draw() {
@@ -101,7 +100,7 @@ class Surface {
 
         if (this.renderOpt[OPT_WIREFRAME]) {
             // render wireframes
-            gl.lineWidth(4)
+            gl.lineWidth(2)
             this.bindAttribute(this.buf.wires, 'aVertPos')
             gl.drawArrays(gl.LINES, 0, this.geo.wires.length / 3) 
         } else if (this.buf.faces) {

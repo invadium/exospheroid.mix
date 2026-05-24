@@ -8,13 +8,6 @@ function geometry() {
     // bake the mesh
     sd.push('cube').label().bake()
 
-    // lets try to use the screwup compiler
-    // TODO something is off with the compile-decompile sequence
-    //      it definitelly executes the runes,
-    //      but never gets into the brew/bake routine
-    //      presumably because of the bytecode mismatch
-    //      after heavy js13k optimizations
-
     // lib.screw.unscrew.setLibrary(lib.geoLibrary)
     // lib.screw.unscrew( lib.screw.screwUp(lib.screwUp.cube) )
     // lib.screw.unscrew( lib.screw.screwUp(lib.screwUp.octahedron) )

@@ -3,3 +3,4 @@ function wireframe(args, line, con) {
 
     con.hide()
 }
+wireframe.info = 'enable wireframe flag on all surfaces'

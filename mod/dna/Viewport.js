@@ -1,4 +1,6 @@
 // a container for WebGL viewport
+//
+// incapsulates rendering setup and basic configuration
 class Viewport extends sys.LabFrame {
 
     constructor(st) {
