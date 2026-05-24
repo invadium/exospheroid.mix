@@ -14,6 +14,8 @@ class Surface {
 
             renderOpt: vec4(1, 0, 0, 0), // render options
             //renderOpt: vec4(1, 1, 1, 1), // render options buf: {},
+            
+            color: vec4( .1, 1, .6 ),
 
             buf: {},
         }, st)
@@ -68,6 +70,13 @@ class Surface {
         if (this.tex) this.renderOpt[OPT_TEXTURE] = 1
         else this.renderOpt[OPT_TEXTURE] = 0
         glu.uniform4fv('uOpt', this.renderOpt)
+
+        // bing global color if needed
+        // TODO figure if the current program supports global color uColor
+        //      isn't that part of the custom material setup?
+        if (this.color) {
+            glu.uniform4fv('uColor', this.color)
+        }
 
         // -------------------------------------
         // bind our geometry and materials

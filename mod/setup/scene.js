@@ -70,6 +70,7 @@ function scene() {
                     __.rot[2] += __.rotSpeed[2] * dt
                 },
             },
+            /*
             {
                 name: 'mover',
                 evo: function(dt) {
@@ -78,6 +79,7 @@ function scene() {
                     //__.pos[1] += 2 * dt
                 },
             },
+            */
             new dna.shape.Surface({
                 name: 'cube',
                 // geo: lib.geo.glib.cube,
@@ -95,9 +97,9 @@ function scene() {
         ],
 
         init() {
-            this.rotSpeed[0] = .5
+            this.rotSpeed[0] =  0
             this.rotSpeed[1] = .3
-            this.rotSpeed[2] = .2
+            this.rotSpeed[2] =  0
         },
     }))
 

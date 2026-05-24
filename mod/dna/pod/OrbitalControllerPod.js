@@ -10,7 +10,7 @@ class OrbitalControllerPod {
         extend(this, {
             name:      'controller',
             speed:     20,
-            turnSpeed: 2,
+            turnSpeed: PI,
             r:         10,
             maxDist:   3,
 
@@ -20,7 +20,7 @@ class OrbitalControllerPod {
 
             mouseCaptureMask: 2,
             moveOnClick:      true,
-            mouseMoveMask:    7,
+            mouseMoveMask:    4,
 
             reversePitch:     false,
             reverseYaw:       false,
@@ -149,16 +149,16 @@ class OrbitalControllerPod {
     onMouseUp(e) {}
 
     onMouseMove(e) {
-        if (e.buttons & 4) {
+        if (e.buttons & this.mouseMoveMask) {
             const dx = e.movementX, dy = e.movementY
 
             if (dx) {
                 // accumulate horizontal mouse movement
-                this.pushers[dry.YAW] -= dx * .2
+                this.pushers[dry.YAW] -= dx
             }
             if (dy) {
                 // accumulate vertical mouse movement
-                this.pushers[dry.PITCH] += dy * 0.2
+                this.pushers[dry.PITCH] += dy
             }
         } else if (e.buttons & 2) {
             // TODO

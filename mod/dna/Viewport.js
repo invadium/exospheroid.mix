@@ -60,6 +60,8 @@ class Viewport extends sys.LabFrame {
         glu.setIdentity()
         glu.applyModelMatrix()
 
+        // TODO what to do with standard uniforms not picked up by the shaders?
+        //      we MUST ignore those by default
         glu.uniform3fv(uniform.uCamPos, cam.pos)
 
         // TODO precalc in _dirLight buffer and use that instead?
