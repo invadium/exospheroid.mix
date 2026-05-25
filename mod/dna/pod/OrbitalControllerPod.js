@@ -9,18 +9,25 @@ class OrbitalControllerPod {
     constructor(st) {
         extend(this, {
             name:      'controller',
-            speed:     20,
-            turnSpeed: PI,
-            r:         10,
-            maxDist:   3,
 
-            zoomSpeed:       .005,
+            speed:            20,
+            zoomSpeed:        80,
             minFOV:           1,
             maxFOV:           120,
+            r:                10,
+            maxDist:          3,
+            verticalTurnSpeed:   PI,
+            horizontalTurnSpeed: 20 * PI,
 
             mouseCaptureMask: 2,
             moveOnClick:      true,
             mouseMoveMask:    4,
+
+            sensitivity: {
+                horizontal:   .02,
+                vertical:     .02,
+                wheel:        .0001,
+            },
 
             reversePitch:     false,
             reverseYaw:       false,
@@ -47,9 +54,10 @@ class OrbitalControllerPod {
         }
     }
 
-    zoom(delta) {
-        const __ = this.__
-        __.vfov = clamp(__.vfov + delta * this.zoomSpeed, this.minFOV, this.maxFOV)
+    zoom(dtFactor) {
+        const __    = this.__,
+              delta = dtFactor * this.zoomSpeed
+        __.vfov = clamp(__.vfov + delta, this.minFOV, this.maxFOV)
     }
 
     /*
@@ -64,9 +72,9 @@ class OrbitalControllerPod {
     */
 
     push(action, factor, dt) {
-        const __ = this.__
-        const speed     = this.speed
-        const turnSpeed = this.turnSpeed
+        const __ = this.__,
+              speed     = this.speed,
+              turnSpeed = this.turnSpeed
 
         switch(action) {
             case dry.FORWARD:
@@ -99,16 +107,23 @@ class OrbitalControllerPod {
                 break
 
             case dry.ZOOM:
+                if (factor < 0) this.zoom(-dt)
+                else this.zoom(dt)
+                // __.zoom(dt)
+                break
+            /*
+            case dry.ZOOM:
                 if (factor > 0 || vec3.dist(__.pos, __.lookAt) > this.maxDist) {
                     __.moveZ(factor * dt)
                 }
                 break
+            */
 
             case dry.YAW:
-                __.moveX(speed * factor * dt)
+                __.moveX(this.horizontalTurnSpeed * factor * dt)
                 break
             case dry.PITCH:
-                __.moveY(speed * factor * dt)
+                __.moveY(this.verticalTurnSpeed * factor * dt)
                 break
             case dry.ROLL:
                 break
@@ -122,7 +137,16 @@ class OrbitalControllerPod {
             const f = this.pushers[i]
             if (f) {
                 this.push(i, f, dt)
-                if (i > 20) this.pushers[i] = 0 // reset the mouse movement accumulation buffers
+                if (i > 20) {
+                    if (f > 0) {
+                        this.pushers[i] -= dt
+                        if (this.pushers[i] < 0) this.pushers[i] = 0
+                    } else if (f < 0) {
+                        this.pushers[i] += dt
+                        if (this.pushers[i] > 0) this.pushers[i] = 0
+                    }
+                }
+                // if (i > 20) this.pushers[i] = 0 // reset the mouse movement accumulation buffers
             }
         }
     }
@@ -149,16 +173,23 @@ class OrbitalControllerPod {
     onMouseUp(e) {}
 
     onMouseMove(e) {
+        const pushers = this.pushers
         if (e.buttons & this.mouseMoveMask) {
             const dx = e.movementX, dy = e.movementY
 
             if (dx) {
+                // cancel the opposite movement if necessary
+                if (dx < 0 && pushers[dry.YAW] > 0) pushers[dry.YAW] = 0
+                if (dx > 0 && pushers[dry.YAW] < 0) pushers[dry.YAW] = 0
                 // accumulate horizontal mouse movement
-                this.pushers[dry.YAW] -= dx
+                pushers[dry.YAW] -= dx * this.sensitivity.horizontal
             }
             if (dy) {
+                // cancel the opposite movement if necessary
+                if (dy < 0 && pushers[dry.PITCH] > 0) pushers[dry.YAW] = 0
+                if (dy > 0 && pushers[dry.PITCH] < 0) pushers[dry.YAW] = 0
                 // accumulate vertical mouse movement
-                this.pushers[dry.PITCH] += dy
+                this.pushers[dry.PITCH] += dy * this.sensitivity.vertical
             }
         } else if (e.buttons & 2) {
             // TODO
@@ -166,7 +197,8 @@ class OrbitalControllerPod {
     }
 
     onMouseWheel(e) {
-        if (e.deltaY !== 0) this.zoom(e.deltaY)
+        this.pushers[dry.ZOOM] += e.deltaY * this.sensitivity.wheel
+        // if (e.deltaY !== 0) this.zoom(e.deltaY)
     }
 
     onPointerLock() {

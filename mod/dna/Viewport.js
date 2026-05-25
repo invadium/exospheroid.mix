@@ -1,4 +1,4 @@
-// a container for WebGL viewport
+// WebGL Viewport - defines renderable surface
 //
 // incapsulates rendering setup and basic configuration
 class Viewport extends sys.LabFrame {

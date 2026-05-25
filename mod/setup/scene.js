@@ -102,6 +102,7 @@ function scene() {
             this.rotSpeed[2] =  0
         },
     }))
+    pin.target = cuboid
 
     /*
     lab.spawn(dna.geo.Image, {
