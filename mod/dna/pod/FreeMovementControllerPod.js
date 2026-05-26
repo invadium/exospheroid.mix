@@ -3,9 +3,9 @@
  */
 class FreeMovementControllerPod {
 
-    constructor(st) {
-        extend(this, {
-            name:            'controller',
+    constructor(st) { extend(this, {
+            name:            'freeMovementController',
+            alias:           'controller',
             speed:            20,
             turnSpeed:        1,
             zoomSpeed:       .005,
@@ -18,26 +18,35 @@ class FreeMovementControllerPod {
             reversePitch:     false,
             reverseYaw:       false,
         }, st)
+        trait(this, dna.trait.activePodTrait)
 
         this.pushers = new Float32Array(32)
     }
 
     init() {
+        this.activate()
         this.capture()
     }
 
     capture() {
-        this.disabled = false
+        this.__.release()
         lab.monitor.mouseBroker = this
         lab.monitor.controller.bindAll(this)
     }
 
     release() {
-        this.disabled = true
         if (lab.monitor.mouseBroker === this) {
             lab.monitor.mouseBroker = null
-            lab.monitor.controller.unbindAll()
+            lab.monitor.controller.releaseAll(this)
         }
+    }
+
+    onActivate() {
+        this.capture()
+    }
+
+    onDeactivate() {
+        this.release()
     }
 
     zoom(delta) {

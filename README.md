@@ -30,5 +30,6 @@ jam -d --failOnMissingUniform
 ### Keystrokes
 
 ```
+Ctrl+V - switch camera mode from orbital to the free roaming and back
 Ctrl+B - switch to wireframe mode and back
 ```

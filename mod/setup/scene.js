@@ -4,12 +4,8 @@ function scene() {
         Z:     13,
         name: 'cam',
         _pods: [
-            new dna.pod.FreeMovementControllerPod({
-                name: 'freeMovementController',
-            }),
-            new dna.pod.OrbitalControllerPod({
-                name: 'orbitalController',
-            }),
+            new dna.pod.FreeMovementControllerPod(),
+            new dna.pod.OrbitalControllerPod(),
         ],
     })
     lab.port.bindCamera(cam)
@@ -169,7 +165,6 @@ function scene() {
     cam.pos[1] = 4
     cam.pos[2] = 16
     cam.dir[1] = .2
-
-    lab.port.cam.lookAt(cuboid)
+    cam.lookAt(pin.target)
 }
 scene.Z = 101

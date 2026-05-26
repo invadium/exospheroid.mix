@@ -8,9 +8,8 @@ class EntityFrame extends sys.LabFrame {
         const _ = this
 
         // install trails if present
-        if (st && st._traits) st._traits.forEach(trait => {
-            extend(_, trait, p => p !== 'name' && p !== 'onExtend' && !p.startsWith('_'))
-            //if (trait.__onTrait) trait.__onTrait.call(_))
+        if (st && st._traits) st._traits.forEach(t => {
+            trait(_, t)
         })
 
         // install pods if present
@@ -19,6 +18,12 @@ class EntityFrame extends sys.LabFrame {
                 _.attach(pod)
             })
         }
+    }
+
+    onAttach(e) {
+        log(this.name + ' - attaching here!')
+        dir(e)
+                
     }
 
 }

@@ -9,7 +9,7 @@ class Camera extends EntityFrame {
             zFar:  256,
         }
         if (!st._traits) st._traits = []
-        st._traits = augment(st._traits, [ dna.pod.attitudeTrait ])
+        st._traits = extend(st._traits, [ dna.trait.attitudeTrait ])
         super( extend(df, st) )
     }
 
@@ -35,6 +35,11 @@ class Camera extends EntityFrame {
         }
     }
 
+    release() {
+        this.target    = null
+        this.targetXYZ = null
+    }
+    
     projectionMatrix() {
         const aspect = gl.canvas.width / gl.canvas.height
         return mat4.iperspective(this.vfov, gl.canvas.width/gl.canvas.height, this.zNear, this.zFar)

@@ -8,7 +8,8 @@ class OrbitalControllerPod {
 
     constructor(st) {
         extend(this, {
-            name:      'controller',
+            name:            'orbitalController',
+            alias:           'controller',
 
             speed:            20,
             zoomSpeed:        80,
@@ -32,26 +33,33 @@ class OrbitalControllerPod {
             reversePitch:     false,
             reverseYaw:       false,
         }, st)
-
+        trait(this, dna.trait.activePodTrait)
         this.pushers = new Float32Array(32)
     }
 
     init() {
+        this.activate()
         this.capture()
     }
 
     capture() {
-        this.disabled = false
         lab.monitor.mouseBroker = this
         lab.monitor.controller.bindAll(this)
     }
 
     release() {
-        this.disabled = true
         if (lab.monitor.mouseBroker === this) {
             lab.monitor.mouseBroker = null
-            lab.monitor.controller.unbindAll(this)
+            lab.monitor.controller.releaseAll(this)
         }
+    }
+
+    onActivate() {
+        this.capture()
+    }
+
+    onDeactivate() {
+        this.release()
     }
 
     zoom(dtFactor) {
