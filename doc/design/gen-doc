@@ -1,0 +1,15 @@
+#!/bin/sh
+
+SRC=./playbook.ad
+OUT=./out
+NAME=corkscrew
+
+# asciidoctor -D $OUT -o $NAME.html $SRC
+asciidoctor -a stylesheet=./style/style.css -D $OUT -o $NAME.html $SRC
+
+asciidoctor-epub3 -D $OUT -o $NAME.epub $SRC
+
+asciidoctor-pdf -a pdf-theme=./style/jam-theme.yml -a pdf-fontsdir=./fnt -D $OUT -o $NAME.pdf $SRC
+
+cp -r ./fnt $OUT
+

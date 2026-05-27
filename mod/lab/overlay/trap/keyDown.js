@@ -38,6 +38,12 @@ function handleOpt(e) {
 
 function handleKeys(e) {
     switch(e.code) {
+        case 'KeyZ':
+            lab.port.spinner.targetPrev()
+            break
+        case 'KeyX':
+            lab.port.spinner.targetNext()
+            break
     }
 }
 

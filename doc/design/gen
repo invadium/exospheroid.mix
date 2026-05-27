@@ -1,0 +1,13 @@
+#!/bin/bash
+
+export usr=$(id -u)
+export grp=$(id -g)
+
+./clean --fast
+
+docker run \
+    --user $usr:$grp \
+    --volume `pwd`:/documents \
+    asciidoctor/docker-asciidoctor \
+    ./gen-doc
+

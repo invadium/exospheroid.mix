@@ -1,0 +1,8 @@
+@font-face {
+    font-family: PixelOperator;
+    src: url(fnt/PixelOperator.ttf) format("truetype");
+}
+
+body {
+    font-family: PixelOperator;
+}

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ "$1" == "--fast" ]; then
+    # without output folder
+    rm -rf ./out/*
+else
+    # with output folder
+    rm -rf ./out
+fi
+

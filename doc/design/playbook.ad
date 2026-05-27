@@ -1,0 +1,19 @@
+= CorkScrew
+Igor Khotin
+v0.1, May 2026
+:doctype: book
+:media: prepress
+:toc: left
+:toclevels: 1
+:outlinelevels: 1
+:sectnums:
+:sectnumlevels: 1
+:chapter-label: 
+:source-highlighter: coderay
+:imagesdir: img 
+:front-cover-image: image:cover.jpeg[Front Cover,1050,1600]
+
+include::parts/00-intro.ad[]
+include::parts/03-core-tenets.ad[]
+include::parts/11-tips.ad[]
+

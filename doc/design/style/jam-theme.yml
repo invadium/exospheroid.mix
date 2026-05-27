@@ -1,0 +1,105 @@
+extends: default
+
+page:
+    layout: portrait 
+    margin: [0.55in, 0.7in, 0.55in, 0.7in]
+    size: A5
+
+font:
+  catalog:
+    PixelOperator:
+        normal:        PixelOperator.ttf
+        italic:        PixelOperatorSC.ttf
+        bold:          PixelOperator-Bold.ttf
+        bold_italic:   PixelOperatorHB.ttf
+    GameBoy:
+        normal: 04B_30.ttf
+        bold:   04B_30.ttf
+    VCR_OSD_MONO:
+        normal: VCR_OSD_MONO.ttf
+
+base:
+    font:
+        color: #222222
+        family: PixelOperator
+        size: 14
+    align: justify
+
+heading:
+    h1:
+        align: center
+        font:
+            color: #4a6db2
+            family: GameBoy
+            size: 20
+        text_transform: uppercase
+        margin_top: 50
+
+    h2:
+        align: center
+        font:
+            color: #4a6db2
+            family: GameBoy
+            size: 14
+        text_transform: uppercase
+    h3:
+        align: left 
+        font:
+            color: #d78d42
+            family: GameBoy
+            size: 12
+        text_transform: uppercase
+    h4:
+        align: left 
+        font:
+            color: #70819d
+            family: GameBoy
+            size: 9
+        text_transform: uppercase
+
+code:
+    font:
+        family: VCR_OSD_MONO
+        size: 11
+    background_color: #e4e4d8
+    border_width: 1
+    border-color: #b0b0b0
+
+sidebar:
+    font:
+        family: VCR_OSD_MONO
+        size: 14
+        style: italic
+    background_color: #f3f3f0
+    border_width: 1
+    border-color: #2f8e6d
+sidebar_title:
+    font:
+        family: VCR_OSD_MONO
+        size: 16
+        style: bold
+        color: #2f8e6d
+    text_transform: uppercase
+
+#header:
+#    height: 0.5in
+#    line_height: 1.5
+#    recto_content:
+#        left: '*{page-number}* | {document-title}'
+#    verso_content:
+#        right: '{chapter-title} | *{page-nymber}*'
+ 
+footer:
+    height: 0.5in
+    line_height: 0.5
+      #recto_content:
+      #  left: ' *{page-number}* | {document-title} '
+      #verso_content:
+      #  right: ' {chapter-title} | *{page-number}* '
+    padding: [10, 0, 0, 0]
+    font:
+        family: VCR_OSD_MONO
+        size: 12
+        style: normal
+        color: #7497a6
+
