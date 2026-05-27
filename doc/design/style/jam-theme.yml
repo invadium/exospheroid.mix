@@ -2,26 +2,29 @@ extends: default
 
 page:
     layout: portrait 
-    margin: [0.55in, 0.7in, 0.55in, 0.7in]
-    size: A5
+    margin: [0.75in, 1.5in, 0.75in, 1.5in]
+    size: A4
 
 font:
   catalog:
-    PixelOperator:
-        normal:        PixelOperator.ttf
-        italic:        PixelOperatorSC.ttf
-        bold:          PixelOperator-Bold.ttf
-        bold_italic:   PixelOperatorHB.ttf
-    GameBoy:
-        normal: 04B_30.ttf
-        bold:   04B_30.ttf
-    VCR_OSD_MONO:
-        normal: VCR_OSD_MONO.ttf
+    BaseFont:
+        normal:        EBGaramond-Regular.ttf
+        italic:        EBGaramond-Italic.ttf
+        bold:          EBGaramond-Bold.ttf
+        bold_italic:   EBGaramond-BoldItalic.ttf 
+    TitleFont:
+        normal: nunito-regular.ttf
+        bold:   nunito-regular.ttf
+    HeaderFont:
+        normal: source-code-pro.regular.ttf
+    CodeFont:
+        normal: source-code-pro.regular.ttf
+    
 
 base:
     font:
         color: #222222
-        family: PixelOperator
+        family: BaseFont
         size: 14
     align: justify
 
@@ -30,8 +33,8 @@ heading:
         align: center
         font:
             color: #4a6db2
-            family: GameBoy
-            size: 20
+            family: TitleFont
+            size: 30
         text_transform: uppercase
         margin_top: 50
 
@@ -39,27 +42,27 @@ heading:
         align: center
         font:
             color: #4a6db2
-            family: GameBoy
-            size: 14
+            family: TitleFont
+            size: 24
         text_transform: uppercase
     h3:
         align: left 
         font:
             color: #d78d42
-            family: GameBoy
+            family: TitleFont
             size: 12
         text_transform: uppercase
     h4:
         align: left 
         font:
             color: #70819d
-            family: GameBoy
+            family: TitleFont
             size: 9
         text_transform: uppercase
 
 code:
     font:
-        family: VCR_OSD_MONO
+        family: CodeFont
         size: 11
     background_color: #e4e4d8
     border_width: 1
@@ -67,7 +70,7 @@ code:
 
 sidebar:
     font:
-        family: VCR_OSD_MONO
+        family: HeaderFont
         size: 14
         style: italic
     background_color: #f3f3f0
@@ -75,7 +78,7 @@ sidebar:
     border-color: #2f8e6d
 sidebar_title:
     font:
-        family: VCR_OSD_MONO
+        family: HeaderFont
         size: 16
         style: bold
         color: #2f8e6d
@@ -98,7 +101,7 @@ footer:
       #  right: ' {chapter-title} | *{page-number}* '
     padding: [10, 0, 0, 0]
     font:
-        family: VCR_OSD_MONO
+        family: HeaderFont
         size: 12
         style: normal
         color: #7497a6

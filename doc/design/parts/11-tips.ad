@@ -1,0 +1,24 @@
+== Some Source
+
+[source,javascript]
+----
+draw: function() {
+	// define saucer sizes and color
+	const sw = 70
+	const tw = 25
+	const sh = 20
+	ctx.fillStyle = '#609040'
+
+	// draw the saucer shape
+	ctx.beginPath()
+	ctx.moveTo(this.x - sw/2, this.y)
+	ctx.lineTo(this.x - tw/2, this.y-sh/2)
+	ctx.lineTo(this.x + tw/2, this.y-sh/2)
+	ctx.lineTo(this.x + sw/2, this.y)
+	ctx.lineTo(this.x + tw/2, this.y+sh/2)
+	ctx.lineTo(this.x - tw/2, this.y+sh/2)
+	ctx.closePath()
+	ctx.fill()
+}
+----
+
