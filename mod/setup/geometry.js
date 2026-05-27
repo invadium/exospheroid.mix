@@ -8,6 +8,11 @@ function geometry() {
     // bake the mesh
     sd.push('cube').label().bake()
 
+    // here we screw up some meshes
+    sd.gen().cube().push(.8).scale().randomColors()
+    // bake the mesh
+    sd.push('cubeTwo').label().bake()
+
     // lib.screw.unscrew.setLibrary(lib.geoLibrary)
     // lib.screw.unscrew( lib.screw.screwUp(lib.screwUp.cube) )
     // lib.screw.unscrew( lib.screw.screwUp(lib.screwUp.octahedron) )
@@ -20,6 +25,10 @@ function geometry() {
     sd.next( g ).randomColors().bake()
 
     g = lib.geoLibrary.mesh.selectOne('octahedron')
+    g.colors = []
+    sd.next( g ).randomColors().bake()
+
+    g = lib.geoLibrary.mesh.selectOne('mod-octahedron')
     g.colors = []
     sd.next( g ).randomColors().bake()
 

@@ -49,6 +49,7 @@ function scene() {
     }))
     */
 
+    /*
     const cuboid = lab.port.attach( new dna.shape.Form({
         name: 'cuboid',
         pos: vec3(0, 0, 0),
@@ -67,6 +68,7 @@ function scene() {
                 },
             },
             /*
+            //////////////////////////////
             {
                 name: 'mover',
                 evo: function(dt) {
@@ -75,7 +77,8 @@ function scene() {
                     //__.pos[1] += 2 * dt
                 },
             },
-            */
+            ///////////////////////////////
+
             new dna.shape.Surface({
                 name: 'cube',
                 // geo: lib.geo.glib.cube,
@@ -99,6 +102,7 @@ function scene() {
         },
     }))
     pin.target = cuboid
+    */
 
     /*
     lab.spawn(dna.geo.Image, {
@@ -161,10 +165,15 @@ function scene() {
     })
     */
 
+    lab.port.spawn('GeoSpinner', {
+        name:       'spinner',
+        geoLibrary:  lib.geoLibrary,
+    })
+
     // move camera back a little
-    cam.pos[1] = 4
-    cam.pos[2] = 16
+    cam.pos[1] = 10
+    cam.pos[2] = 40
     cam.dir[1] = .2
-    cam.lookAt(pin.target)
+    cam.lookAt([0, 0, 0])
 }
 scene.Z = 101

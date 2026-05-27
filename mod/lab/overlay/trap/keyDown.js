@@ -17,10 +17,31 @@ function handleOpt(e) {
             signal('nextProg')
             signal('nextOpt')
             break
-    }
 
+        case 'ArrowLeft':
+            lab.port.spinner.targetPrev()
+            break
+
+        case 'ArrowRight':
+            lab.port.spinner.targetNext()
+            break
+
+        case 'ArrowDown':
+            lab.port.spinner.targetLast()
+            break
+
+        case 'ArrowUp':
+            lab.port.spinner.targetFirst()
+            break
+    }
+}
+
+function handleKeys(e) {
+    switch(e.code) {
+    }
 }
 
 function keyDown(e) {
     if (e.ctrlKey) handleOpt(e)
+    else handleKeys(e)
 }

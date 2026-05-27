@@ -20,10 +20,4 @@ class EntityFrame extends sys.LabFrame {
         }
     }
 
-    onAttach(e) {
-        log(this.name + ' - attaching here!')
-        dir(e)
-                
-    }
-
 }

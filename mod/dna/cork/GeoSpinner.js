@@ -1,16 +1,15 @@
-// Legacy core UI component of Corkscrew
-// TODO move out to dna/screw
 class GeoSpinner {
 
     constructor(st) {
-        extend(this, {
-            pos:   vec3z(),
+        augment(this, {
+            name: 'geoSpinner',
+            pos:   vec3(),
             angle: 0,
             r:     12, // maybe dynamic derived from the geo meshes sizes values?
 
-            target:      0,
-            spin:        1,
-            spinSpeed:   .4*PI,
+            target:          0,
+            spin:            1,
+            spinSpeed:      .4*PI,
             transitionSpeed: 1,
 
             shapeStats: {
@@ -24,60 +23,40 @@ class GeoSpinner {
 
     init() {
         this.anchor = vec3.clone(this.pos)
-        if (this.gindex) this.buildLib()
-        else if (this.glib) this.buildIndex()
         this.geoForm()
         this.targetLast()
     }
 
-    buildIndex() {
-        const glib = this.glib
-        const gindex = this.gindex = []
-        // index glib
-        for (let name in glib) {
-            log('indexing: ' + name)
-            gindex.push(glib[name])
-        }
-        log('shapes found in geo: ' + gindex.length)
-    }
-
-    buildLib() {
-        const gindex = this.gindex
-        const glib = this.glib = {}
-
-        let i = 0
-        gindex.forEach(g => {
-            if (g.name) glib[g.name] = g
-            log('registering glib entry: ' + g.name)
-            i++
-        })
-        log('shapes registered in glib: ' + i)
-    }
-
     geoForm() {
-        const $ = this
+        const _ = this
         const shapes = this.shapes = []
-        this.gindex.forEach((g) => {
-            const shape = $.geoShape(g)
+
+        this.geoLibrary.mesh._ls.forEach((g) => {
+            const shape = _.geoShape(g)
             shape.geo = g
             g.shape = shape
             shapes.push(shape)
         })
+        console.dir(shapes)
 
-        this.place()
-        this.adjust()
+        this.placeInCircle()
+        this.justifyForms()
     }
 
     geoShape(g) {
         console.dir(g)
-        return lab.attach( new Form({
+        return lab.port.attach( new dna.shape.Form({
+            name:        g.name,
+            pos:         vec3(),
+            rot:         vec3(),
+            rotSpeed:    vec3(-.1, .5, 0),
             angle:       0,
             targetAngle: 0,
             spin:        1,
-            stats:       this.shapeStats,
+            // stats:       this.shapeStats,
 
             _pods: [
-                new Surface({
+                new dna.shape.Surface({
                     geo: g,
                     // TODO should come from material library
                     m: {
@@ -88,8 +67,6 @@ class GeoSpinner {
                     },
                 }),
             ],
-
-            rotSpeed: vec3(-.1, .5, 0),
 
             setTargetAngle: function(ta) {
                 this.targetAngle = ta
@@ -111,7 +88,7 @@ class GeoSpinner {
 
                 // adjust to the target angle
                 const _angle = this.angle
-                this.angle = normalAngle(this.angle + this.spin * this.stats.spinSpeed * dt)
+                this.angle = math.normalizeAngle(this.angle + this.spin * this.stats.spinSpeed * dt)
 
                 // fit the target
                 if (this.spin > 0) {
@@ -132,23 +109,21 @@ class GeoSpinner {
         }))
     }
 
-    place() {
-        const $ = this
-        const sector = $.sector = PI2 / ($.shapes.length)
-        this.shapes.forEach(shape => {
-            const id = $.shapes.indexOf(shape)
-            const ta = normalAngle(-id*sector)
+    placeInCircle() {
+        const _ = this
+        const sector = _.sector = PI2 / (_.shapes.length)
+        _.shapes.forEach((shape, id) => {
+            const ta = math.normalizeAngle(-id*sector)
             shape.angle = ta
             shape.setTargetAngle(ta)
         })
     }
 
-    adjust() {
-        const $ = this
-        const sector = $.sector = PI2 / ($.shapes.length)
-        this.shapes.forEach(shape => {
-            const id = $.shapes.indexOf(shape)
-            shape.setTargetAngle( normalAngle(-id*sector) )
+    justifyForms() {
+        const _ = this
+        const sector = _.sector = PI2 / (_.shapes.length)
+        this.shapes.forEach((shape, id) => {
+            shape.setTargetAngle( math.normalizeAngle(-id*sector) )
         })
 
         if (this.anchor && !vec3.equals(this.pos, this.anchor)) {
@@ -160,64 +135,6 @@ class GeoSpinner {
         }
     }
 
-    targetAngle() {
-        const sector = this.sector = PI2 / (this.shapes.length)
-        return normalAngle(this.target*sector - PI/2)
-    }
-
-    targetNext() {
-        this.spin = 1
-        this.target ++
-        if (this.target >= this.shapes.length) this.target = 0
-    }
-
-    targetPrev() {
-        this.spin = -1
-        this.target --
-        if (this.target < 0) this.target = this.shapes.length - 1
-    }
-
-    targetLast() {
-        this.target = this.shapes.length - 1
-    }
-
-    wireframes(f) {
-        const w = f? 1 : 0
-        this.shapes.forEach(shape => {
-            shape.surface.rO[1] = w
-        })
-    }
-
-    shading(f) {
-        const s = f? 1 : 0
-        this.shapes.forEach(shape => {
-            shape.surface.rO[0] = s
-        })
-    }
-
-    scale(s) {
-        const activeShape = this.getActiveShape()
-        if (!activeShape) return
-
-        const sv = activeShape.scale,
-            min = this.shapeStats.minScale,
-            max = this.shapeStats.maxScale,
-            speed = this.shapeStats.scaleSpeed
-        s *= speed
-
-        sv[0] = clamp(sv[0] + s, min, max)
-        sv[1] = clamp(sv[1] + s, min, max)
-        sv[2] = clamp(sv[2] + s, min, max)
-
-        env.dump.NewScale = '' + sv[0]
-    }
-
-    rotateX(dv) {
-    }
-
-    rotateY(dv) {
-    }
-
     evoShapes(dt) {
         const $ = this
         this.shapes.forEach(shape => {
@@ -226,7 +143,7 @@ class GeoSpinner {
             const dy = 0
             const dz = sin(ra) * $.r
             vec3.set(shape.pos, dx, dy, dz)
-            vec3.add(shape.pos, $.pos)
+            vec3.add(shape.pos, shape.pos, $.pos)
         })
     }
 
@@ -237,7 +154,7 @@ class GeoSpinner {
         if (this.angle === ta) return
 
         const _angle = this.angle
-        this.angle = normalAngle(this.angle + this.spin * this.spinSpeed * dt)
+        this.angle = math.normalizeAngle(this.angle + this.spin * this.spinSpeed * dt)
 
         // fit the target
         if (this.spin > 0) {
@@ -263,7 +180,7 @@ class GeoSpinner {
     }
 
     evo(dt) {
-        this.adjust()
+        this.justifyForms()
         this.evoShapes(dt)
         this.evoSpin(dt)
         this.evoTransition(dt)
@@ -274,11 +191,35 @@ class GeoSpinner {
         }
     }
 
-    getActiveShape() {
-        return this.shapes[this.target]
+    targetAngle() {
+        const sector = this.sector = PI2 / (this.shapes.length)
+        return math.normalizeAngle(this.target*sector - PI/2)
     }
 
-    getScript() {
-        return this.gindex.screw || 'Not Available'
+    targetFirst() {
+        this.target = 0
+    }
+
+    targetNext() {
+        this.spin = 1
+        this.target ++
+        if (this.target >= this.shapes.length) this.target = 0
+        log('target: ' + this.target)
+    }
+
+    targetPrev() {
+        this.spin = -1
+        this.target --
+        if (this.target < 0) this.target = this.shapes.length - 1
+        log('target: ' + this.target)
+    }
+
+    targetLast() {
+        this.target = this.shapes.length - 1
+        log('target last: ' + this.target)
+    }
+
+    getActiveShape() {
+        return this.shapes[this.target]
     }
 }

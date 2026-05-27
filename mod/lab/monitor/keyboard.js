@@ -11,14 +11,16 @@ const controller = require('lab/monitor/controller')
 function init() {
     // register keyboard events
     trap.on('keyDown', (e) => {
-        if (e.repeat) return
+        if (e.repeat || e.ctrlKey || e.altKey || e.metaKey) return
+
         const controllerAction = env.bind.keyCodeActionMap[e.code]
         if (controllerAction) {
             controller.act(controllerAction, e)
         }
     })
     trap.on('keyUp', (e) => {
-        if (e.repeat) return
+        if (e.repeat || e.ctrlKey || e.altKey || e.metaKey) return
+
         const controllerAction = env.bind.keyCodeActionMap[e.code]
         if (controllerAction) {
             controller.cutOff(controllerAction, e)
