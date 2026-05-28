@@ -1,0 +1,33 @@
+=== kube geometry ===
+kube:
+
+mpush mid   -- push the identity model matrix
+
+-- define x2 top faces at Y=1
+-1  1 -1
+ 1  1  1
+-1  1  1
+
+-1  1 -1
+ 1  1 -1
+ 1  1  1
+
+tri tri
+----------------------------
+reflectY   -- reflect Y coordinates of current geometry against the XZ-plane
+mpush      -- store current model matrix
+buf        -- buffer previously generated vertices
+
+HPI mrotY   -- rotate HALF_PI around Y-axis
+unbuf       -- apply current model matrix to the previously buffered values
+
+HPI mrotZ   -- rotate by HALF_PI around Z-axis
+unbuf       -- apply current model matrix to the previously buffered values
+
+mpop
+unbuf       -- apply current model matrix to the previously buffered values
+;
+---------------------
+
+neogeo kube "cubeOne" name brew
+

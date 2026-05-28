@@ -1,4 +1,5 @@
 #!/bin/sh
 
+rm -rf ./doc/design/src
 rm -rf ./doc/design/out
 

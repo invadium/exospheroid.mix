@@ -2,7 +2,7 @@ extends: default
 
 page:
     layout: portrait 
-    margin: [0.75in, 1.5in, 0.75in, 1.5in]
+    margin: [0.75in, 0.5in, 0.75in, 0.5in]
     size: A4
 
 font:
@@ -19,7 +19,30 @@ font:
         normal: source-code-pro.regular.ttf
     CodeFont:
         normal: source-code-pro.regular.ttf
-    
+    CoverFont:
+        normal: psionic-regular.ttf
+
+title-page:
+  background-color: #EAEAEA
+  font:
+      color: #56a6a0
+      family: TitleFont
+      size: 20
+  title:
+    font:
+        color: #56a6a0
+        family: CoverFont
+        size: 50
+  authors:
+    font:
+        color: #56a6a0
+        size: 30
+  subtitle:
+    font:
+        color: #56a6a0
+        size: 20
+
+
 
 base:
     font:
@@ -64,7 +87,9 @@ code:
     font:
         family: CodeFont
         size: 11
-    background_color: #e4e4d8
+    # background_color: #e4e4d8
+    # background_color: #f0dfbd
+    background_color: #ffffff
     border_width: 1
     border-color: #b0b0b0
 
