@@ -17,16 +17,16 @@ class OrbitalControllerPod {
             maxFOV:           120,
             r:                10,
             maxDist:          3,
-            verticalTurnSpeed:   PI,
-            horizontalTurnSpeed: 20 * PI,
+            verticalTurnSpeed:   16 * PI,
+            horizontalTurnSpeed: 420 * PI,
 
             mouseCaptureMask: 2,
             moveOnClick:      true,
             mouseMoveMask:    4,
 
             sensitivity: {
-                horizontal:   .02,
-                vertical:     .02,
+                horizontal:   .005,
+                vertical:     .0025,
                 wheel:        .0001,
             },
 

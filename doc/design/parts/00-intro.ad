@@ -11,6 +11,48 @@ Let's create one of the simplest meshes out there - a single triangle!
 include::../src/tri.up[]
 ----
 
+A screw script consists of a sequence of commands. Some of them are numbers that we want to store on stack. Some are commands for Screw Virtual Machine to take some action, like "neogeo", "tri" or "brew".
+
+Spaces and line feeds are mostly ignored, so you can format the script to your liking.
+
+
+Notice the line comments are denoted with double dash "--". The parser ignores the remainder of the line.
+
+
+=== Data Stack
+
+Data is stored on stack
+
+
+=== Defining Words
+
+
+
+=== Execution Stack
+
+
+
+
+== Basic Geometries
+
+Building geometry out of triangles could be tedious. Luckily, Screw has many convenient words to generate various primities:
+
+----
+include::../src/sphere.up[]
+----
+
+In fact, you can generate all kind of different primitives:
+
+----
+include::../src/shapes.up[]
+----
+
+
+
+
+
+
+
 
 
 

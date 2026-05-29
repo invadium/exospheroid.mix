@@ -25,6 +25,7 @@ class GeoLibrary extends sys.Frame {
     }
 
     attachMesh(mesh) {
+        log('!!!!!!!!!!!!! attaching ' + mesh.name)
         this.mesh.attach( mesh )
     }
 
@@ -34,6 +35,12 @@ class GeoLibrary extends sys.Frame {
 
     attachData(dat) {
         this.data.attach( dat )
+    }
+
+    dumpMeshes() {
+        this.mesh._ls.forEach(g => {
+            log('    * ' + g.name)
+        })
     }
 
 }

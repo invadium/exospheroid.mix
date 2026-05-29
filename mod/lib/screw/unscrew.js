@@ -246,6 +246,8 @@ const ops = [
         ]
         wM(w)
 
+        /*
+        // TODO handle the UV flag
         if (_gUV) {
             g.uvs = g.uvs.concat([
                 1, 0,   1, 1,   0, 1,
@@ -258,6 +260,7 @@ const ops = [
                 }
             }
         }
+        */
         return this
     },
     function sphere() {

@@ -1,0 +1,8 @@
+=== different shapes ===
+
+neogeo sphere "exoSphere" name brew
+neogeo cylinder "exoCylinder" name brew
+neogeo circle "exoCircle" name brew
+neogeo cube "exoCube" name brew
+neogeo plane "exoPlane" name brew
+

@@ -3,15 +3,17 @@ function geometry() {
     // generate meshes
     const sd = lib.screw.screwdriver
 
+    /*
     // here we screw up some meshes
     sd.gen().cube().push(.5).scale().randomColors()
     // bake the mesh
-    sd.push('cube').label().bake()
+    sd.push('cubeOne').label().bake()
 
     // here we screw up some meshes
     sd.gen().cube().push(.8).scale().randomColors()
     // bake the mesh
     sd.push('cubeTwo').label().bake()
+    */
 
     // lib.screw.unscrew.setLibrary(lib.geoLibrary)
     // lib.screw.unscrew( lib.screw.screwUp(lib.screwUp.cube) )
@@ -19,11 +21,21 @@ function geometry() {
 
     // const r2 = lib.screw.screwUp(lib.screwUp.simple)
     // lib.screw.unscrew(r2)
-    
-    let g = lib.geoLibrary.mesh.selectOne('cubeOne')
-    g.colors = []
-    sd.next( g ).randomColors().bake()
 
+    log('=== paint colorless meshes ===')
+    const glib = lib.geoLibrary
+    const colorlessMeshes = glib.mesh._ls.filter(g => !g.colors)
+
+    colorlessMeshes.forEach(g => {
+        log(' * random coloring mesh: ' + g.name)
+        dir(g)
+        if (!g.colors) {
+            g.colors = []
+            sd.next( g ).randomColors().bake()
+        }
+    })
+
+    /*
     g = lib.geoLibrary.mesh.selectOne('octahedron')
     g.colors = []
     sd.next( g ).randomColors().bake()
@@ -35,6 +47,7 @@ function geometry() {
     g = lib.geoLibrary.mesh.selectOne('monoTriangle')
     g.colors = []
     sd.next( g ).randomColors().bake()
+    */
 
     // const res2 = lib.screw.unscrew.unscrewOne(runes)
     // dir(res2)
