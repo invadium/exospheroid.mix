@@ -1,0 +1,7 @@
+[appendix]
+= Included Sample Script
+
+----
+include::../src/sample.dup[]
+----
+

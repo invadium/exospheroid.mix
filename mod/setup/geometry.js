@@ -32,6 +32,10 @@ function geometry() {
     g.colors = []
     sd.next( g ).randomColors().bake()
 
+    g = lib.geoLibrary.mesh.selectOne('monoTriangle')
+    g.colors = []
+    sd.next( g ).randomColors().bake()
+
     // const res2 = lib.screw.unscrew.unscrewOne(runes)
     // dir(res2)
 }

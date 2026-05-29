@@ -1,0 +1,28 @@
+== CorkScrew Journey
+
+=== 13k Package Budget
+
+CorkScrew was conceived during another of my js13k games compo participation in 2024.
+It is challenging to pack model data into a 13k space budget. I considered briefly shipping mesh and material data as .obj and .mlt files. But the size quickly becomes an issue even for relatively simple low-poly models.
+
+Then I played with procedural models I can generate directly in JavaScript - after all, that was a way I've created all my geometry, texture and sound data for my relatively successful entry "Dronepolis: The City of Lost Drones."
+Again, it works fine for very simple low-poly samples, but it becomes pretty cumbersome after a while. I still had hopes to build a complex procedurary generated city and I desperately needed a way to define simple geometries and then build up on top of these simple elements by copying, applying simple transformations, and introducing procedural variations.
+
+At some point, I'd got the idea of a little stack-based language, greatly inspired by Forth/PostScript, VRML, and POV-Ray. A script in such a language can easily be transferred into a sequence of commands, each corresponding to a particular byte-code. So I would compile my geometry with auxilliary data into a string-encoded blob and include it into my 13k game package.
+
+On the other end (in the game), I will take that blob, decrypt the bytecodes and execute them on a little stack-based virtual machine. The result - my meshes, materials, textures and sound data all unpacked from a small lump of scrambled text.
+
+With a custom encoding surpasing Base64 efficiency and along with a JS wrapper, it occupied 779 bytes on the disk. Not bad for all the geometry and sound data in the game.
+
+
+
+=== CorkScrew, Welcome!
+
+At some point in the jam, when the idea for a little stack-based language and a virtual machine for geometric modeling had started to take shape, I knew I needed a name. Even to name my files, folders and script file extensions.
+
+I also knew that the language was very niche and narrow. While you can use Blender to create almost anything - from movies and games to ads and architectural visualizations, my tool was so limited that it was even hard to place them in the same category. Even though both could be used to create model geometry.
+
+So I was thinking about kitchen analogy. I saw the blender on my kitchen and I knew that it is the most versatile tool there. You can mix baby formula there, or make a creme soup or fix some smoothie. The most universal and versitile tool, just like Blender for vertices, colors and textures.
+
+I needed somethig completely opposite of that. What I can find on my kitchen that is the least versatile and universal? While inspecting various kitchen tools and appliances I discovered what I needed hidden in the far corner of one of the kitchens drawers. Corkscrew! It is definitely THE LEAST versatile and universal tools out there, a total opposite of the blender! You can only open wine bottles with it. And not beer or tequilla - no, only wine. And not the cheaper bottles of wine, but only the ones that go with a cork. And not the sparkling ones, cause these will pop out by themselves. So it is a tool to open a very narrow range of bottled alcohol and can almost not be used for anything else. Perfect! We got ourselves the name!
+

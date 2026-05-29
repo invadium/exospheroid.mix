@@ -16,4 +16,7 @@ v0.1, May 2026
 include::parts/00-intro.ad[]
 include::parts/03-core-tenets.ad[]
 include::parts/11-tips.ad[]
+include::parts/15-story.ad[]
+include::parts/17-appendix.ad[]
+include::parts/18-glossary.ad[]
 

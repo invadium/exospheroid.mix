@@ -3,13 +3,16 @@
 Welcome to CorkScrew!
 
 
-== Data Sheets
+== Hello Screw
 
-== Installation
-
-== CorkScrew
+Let's create one of the simplest meshes out there - a single triangle!
 
 ----
-include::../src/sample.dup[]
+include::../src/tri.up[]
 ----
+
+
+
+
+
 

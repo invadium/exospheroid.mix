@@ -1,0 +1,25 @@
+{
+    "globalSession": {
+        "id": "GXXXX-XX-XX",
+        "started": 1779975848685,
+        "time": 3552,
+        "keyStrokes": 11907,
+        "words": 1655
+    },
+    "sessions": [
+        {
+            "id": "S2026-05-29",
+            "started": 1780014982645,
+            "time": 460,
+            "keyStrokes": 501,
+            "words": 40
+        },
+        {
+            "id": "S2026-05-28",
+            "started": 1779975848685,
+            "time": 3092,
+            "keyStrokes": 11406,
+            "words": 1615
+        }
+    ]
+}

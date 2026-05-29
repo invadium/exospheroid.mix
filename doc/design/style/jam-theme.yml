@@ -7,11 +7,13 @@ page:
 
 font:
   catalog:
+    CoverFont:
+        normal: psionic-regular.ttf
     BaseFont:
-        normal:        EBGaramond-Regular.ttf
-        italic:        EBGaramond-Italic.ttf
-        bold:          EBGaramond-Bold.ttf
-        bold_italic:   EBGaramond-BoldItalic.ttf 
+        normal:      EBGaramond-Regular.ttf
+        italic:      EBGaramond-Italic.ttf
+        bold:        EBGaramond-Bold.ttf
+        bold_italic: EBGaramond-BoldItalic.ttf 
     TitleFont:
         normal: nunito-regular.ttf
         bold:   nunito-regular.ttf
@@ -19,8 +21,6 @@ font:
         normal: source-code-pro.regular.ttf
     CodeFont:
         normal: source-code-pro.regular.ttf
-    CoverFont:
-        normal: psionic-regular.ttf
 
 title-page:
   background-color: #EAEAEA

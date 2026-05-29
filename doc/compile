@@ -18,7 +18,7 @@ spin() {
 echo "Copying sources..."
 rm -rf ./design/src
 mkdir ./design/src
-cp -r ../mod/lib/up/* ./design/src/
+cp -r ../mod/up/* ./design/src/
 
 echo "=== DESIGN DOC ==="
 cd design
