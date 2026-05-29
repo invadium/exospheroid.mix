@@ -185,7 +185,7 @@ class GeoSpinner {
         this.evoSpin(dt)
         this.evoTransition(dt)
 
-        const active = this.getActiveShape()
+        const active = this.getTargetShape()
         if (active) {
             env.status = `Shape: ${this.shapes[this.target].geo.name}`
         }
@@ -198,12 +198,14 @@ class GeoSpinner {
 
     targetFirst() {
         this.target = 0
+        this.syncCamera()
     }
 
     targetNext() {
         this.spin = 1
         this.target ++
         if (this.target >= this.shapes.length) this.target = 0
+        this.syncCamera()
         log('target: ' + this.target)
     }
 
@@ -211,15 +213,21 @@ class GeoSpinner {
         this.spin = -1
         this.target --
         if (this.target < 0) this.target = this.shapes.length - 1
+        this.syncCamera()
         log('target: ' + this.target)
     }
 
     targetLast() {
         this.target = this.shapes.length - 1
+        this.syncCamera()
         log('target last: ' + this.target)
     }
 
-    getActiveShape() {
+    getTargetShape() {
         return this.shapes[this.target]
+    }
+
+    syncCamera() {
+        pin.cam.lookAt([0, 0, -12])
     }
 }

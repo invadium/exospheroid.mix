@@ -165,15 +165,16 @@ function scene() {
     })
     */
 
-    lab.port.spawn('GeoSpinner', {
+    const spinner = lab.port.spawn('GeoSpinner', {
         name:       'spinner',
         geoLibrary:  lib.geoLibrary,
     })
 
     // move camera back a little
-    cam.pos[1] = 10
-    cam.pos[2] = 40
-    cam.dir[1] = .2
-    cam.lookAt([0, 0, 0])
+    cam.pos[1] =  10
+    cam.pos[2] = -40
+    // cam.dir[1] = .2
+    spinner.syncCamera()
+    // cam.lookAt( lab.port.spinner.getTargetShape() )
 }
 scene.Z = 101
