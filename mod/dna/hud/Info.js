@@ -22,7 +22,7 @@ class Info {
     set(key, msg, icon) {
         this.keys[key] = msg
         this.icons[key] = icon
-        if (!msg) delete this.keys[key]
+        if (msg == undefined) delete this.keys[key]
     }
 
     seti(key, msg, icon) {

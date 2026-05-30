@@ -2,11 +2,18 @@
     "globalSession": {
         "id": "GXXXX-XX-XX",
         "started": 1779975848685,
-        "time": 3552,
-        "keyStrokes": 11907,
-        "words": 1655
+        "time": 4176,
+        "keyStrokes": 14235,
+        "words": 1959
     },
     "sessions": [
+        {
+            "id": "S2026-05-30",
+            "started": 1780166284631,
+            "time": 624,
+            "keyStrokes": 2328,
+            "words": 304
+        },
         {
             "id": "S2026-05-29",
             "started": 1780014982645,

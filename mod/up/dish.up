@@ -1,0 +1,15 @@
+=== dish ===
+
+
+neogeo sphere buf
+
+0 -.5 0     -- push translation vector
+translate  -- translate the matrix
+unbuf      -- extract buffered values and apply current transforms
+
+discardNegativeY
+
+dump
+
+"dish" name brew
+

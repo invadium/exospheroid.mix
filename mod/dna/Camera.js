@@ -109,6 +109,7 @@ class Camera extends EntityFrame {
     evo(dt) {
         super.evo(dt)
 
+        // TODO move to a probe
         if (env.debug) {
             pin.info.set('Cam',
                   'pos:'  + lib.dump.vec3(this.pos, 1)

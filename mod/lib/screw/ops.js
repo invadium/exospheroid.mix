@@ -34,6 +34,9 @@ const ref = [
     'reflectZ',
     'scale',
     'stretch',
+    'discardNegativeX',
+    'discardNegativeY',
+    'discardNegativeZ',
 
     // geometry assemblers
     'tri',

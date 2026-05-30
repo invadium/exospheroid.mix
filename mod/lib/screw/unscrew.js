@@ -40,14 +40,14 @@ function popV4() {
     return vec4(x, y, z, w)
 }
 
-// apply a function for each vertice value
+// apply a function for each vertice value of current geometry
 function vxApply(fn) {
     for (let i = 0; i < g.vertices.length; i++) {
         g.vertices[i] = fn(g.vertices[i], i)
     }
 }
 
-// apply function to x/y/z vertex tripplets
+// apply the function to x/y/z vertex tripplets of current geometry
 function v3c(fn) {
     let swap = true, bv, ln = g.vertices.length
     for (let i = 0; i < ln; i += 3) {
@@ -62,6 +62,33 @@ function v3c(fn) {
             }
         }
     }
+}
+
+function filterTri(fn) {
+    const ls = g.vertices,
+          N  = ls.length,
+          nl = []
+    for (let i = 0; i < N; i += 9) {
+        const pass = fn( 
+            ls[i  ], ls[i+1], ls[i+2],
+            ls[i+3], ls[i+4], ls[i+5],
+            ls[i+6], ls[i+7], ls[i+8]
+        )
+        if (pass) {
+            nl.push( ls[i  ] )
+            nl.push( ls[i+1] )
+            nl.push( ls[i+2] )
+
+            nl.push( ls[i+3] )
+            nl.push( ls[i+4] )
+            nl.push( ls[i+5] )
+
+            nl.push( ls[i+6] )
+            nl.push( ls[i+7] )
+            nl.push( ls[i+8] )
+        }
+    }
+    g.vertices = nl
 }
 
 // apply current model matrix to provided array and push values
@@ -141,7 +168,7 @@ const ops = [
     function unbuf() {
         wM(b)
     },
-    // HPI - push half PI
+    // HPI (Half PI) - push half PI
     function HPI() { s.push( PI/2 ) },
     function add() { s.push( pop() + pop() ) },
     function sub() {
@@ -167,11 +194,15 @@ const ops = [
     function mrotX() { mat4.rotX(M, pop()) },
     function mrotY() { mat4.rotY(M, pop()) },
     function mrotZ() { mat4.rotZ(M, pop()) },
-    function reflectX() { v3c((x, y, z) => vec3(-x, y, z)) },
+    function reflectX() {
+        v3c((x, y, z) => vec3(-x, y, z))
+    },
     function reflectY() {
         v3c((x, y, z) => vec3(x, -y, z))
     },
-    function reflectZ() { v3c((x, y, z) => vec3(x, y, -z)) },
+    function reflectZ() {
+        v3c((x, y, z) => vec3(x, y, -z))
+    },
     function scale() {
         x = pop()
         vxApply(n => n * x)
@@ -183,6 +214,21 @@ const ops = [
         vxApply((n, i) => i % 3 == 2? n * z : n)
         vxApply((n, i) => i % 3 == 1? n * y : n)
         vxApply((n, i) => (i % 3) == 0? n * x : n)
+    },
+    function discardNegativeX() {
+        filterTri((x1, y1, z1,  x2, y2, z2,  x3, y3, z3) => {
+            return (x1 >= 0 && x2 >= 0 && x3 >= 0)
+        })
+    },
+    function discardNegativeY() {
+        filterTri((x1, y1, z1,  x2, y2, z2,  x3, y3, z3) => {
+            return (y1 >= 0 && y2 >= 0 && y3 >= 0)
+        })
+    },
+    function discardNegativeZ() {
+        filterTri((x1, y1, z1,  x2, y2, z2,  x3, y3, z3) => {
+            return (z1 >= 0 && z2 >= 0 && z3 >= 0)
+        })
     },
 
     // geometry assemblers
