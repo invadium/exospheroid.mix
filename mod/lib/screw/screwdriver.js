@@ -1,6 +1,13 @@
 // geometry (mesh/material/data) direct generator
+//
+// In many ways, it is similar to the screw scripts.
+// You can apply a series of transformation and generate geomerty
+//
 // TODO how to merge these functions with unscrew interpreter? can they be shared?
 //      they are essentially doing the same thing!
+//      Maybe it can work as a wrapper on top of the corkscrew vm?
+//      Should we name the VM as ScrewDriver - .up with screw scripts
+//      -> screwUp compiler -> unscrew -> screwdriver -> view in corkscrew
 const screwdriver = (() => {
 
 const flags = {

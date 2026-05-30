@@ -1,10 +1,19 @@
+// CorkScrew virtual machine
+// 
+// Receives screw opcodes as the input and produces
+// geometry and auxiliary data as the output.
+//
+// TODO how to add a new VM instruction?
+//
+// TODO must be called screwdriver
+
 // === geo library ===
 // Accumulates all meshes and materials parsed in this session
 let library
 
 const unscrew = (() => {
 
-// === geo state ===
+// === geometry state ===
 let g,                      // current geo form
     x, y, z, w,             // working registers
 
@@ -456,6 +465,10 @@ const ops = [
         g.w.vc = g.vertices.length / 3
         delete g.vertices
     },
+
+    function dump() {
+        dumpVM()
+    },
 ]
 
 // === SCREW VM ===
@@ -482,23 +495,34 @@ function unscrewOpcodes(rawcodes) {
 
 /*
 // HOWTO introduce a new op
-//       * include the operator function into the ops array in geo
-//       * insert the op name in the opsRef manifest at the matching position (== ops array index)
-//       * bump ghost opcodes limit to match PUSHS opcode index
-//       * don't forget to recompile existing snapshots with ./compile-s!
+//       * include the operator function into the ops array in unscrew (future screwdriver)
+//       * insert the op name in the ops.ref manifest at the matching position (== ops array index) => must be indexed automatically
+//
+//       * don't forget to recompile existing snapshots with ./compile-s! (only for js13k?)
 */
+
+/*
 const PUSHS = 39,
       DEF   = PUSHS + 1,
       END   = PUSHS + 2,
       CALL  = PUSHS + 3,
       PUSHV = PUSHS + 4
+*/
 
 function exec(opcodes) {
-    const len = opcodes.length
+    const lops = lib.screw.ops,
+          SPECIAL  = lops.SPECIAL,
+          PUSH_VVV = lops.PUSH_VVV,
+          PUSHS    = lops.PUSHS,
+          DEF      = lops.DEF,
+          END      = lops.END,
+          CALL     = lops.CALL
+
+    const LEN = opcodes.length
     let op, i = 0, n, buf
     // DEBUG vm
     try {
-        while (i < len) {
+        while (i < LEN) {
             op = opcodes[i++]
 
             if (cdef) {
@@ -507,7 +531,7 @@ function exec(opcodes) {
                     // definition is done
                     console.log('#' + (def.length-1) + ' - NEW WORD IS DEFINED!')
                     console.dir(cdef)
-                    console.log(cdef.map(op => op + '/' + lib.screw.ops.opsRef[op]).join(' '))
+                    console.log(cdef.map(op => op + '/' + lib.screw.ops.ref[op]).join(' '))
                     cdef = null
                 } else {
                     cdef.push(op)
@@ -517,15 +541,15 @@ function exec(opcodes) {
 
                 if (env.config.debugUnscrew) {
                     switch(op) {
-                        case PUSHS: log('^pushs');   break;
-                        case DEF:   log('^def');     break;
-                        case CALL:  log('^call');    break;
-                        case PUSHV: log('^pushv');   break;
+                        case PUSHS:    log('^pushs');   break;
+                        case DEF:      log('^def');     break;
+                        case END:      log('^end');     break;
+                        case CALL:     log('^call');    break;
 
                         default:
-                            if (op >= PUSHV + 16) {
+                            if (op >= PUSH_VVV + 16) {
                                 log('^unscrewing a sequence?')
-                            } else if (op >= PUSHV) {
+                            } else if (op >= PUSH_VVV) {
                                 log('^unscrewing a number???')
                             } else {
                                 log(`^!${ops[op].name}()`)
@@ -556,14 +580,14 @@ function exec(opcodes) {
 
                     /*
                     // TODO is it needed at all?
-                    case PUSHV:
+                    case PUSH_VVV:
                         s.push(unscrewNumber(opcodes[i++]))
                         break
                     */
 
                     default:
-                        if (op >= PUSHV + 16) {
-                            let o = op - PUSHV - 16,
+                        if (op >= PUSH_VVV + 16) {
+                            let o = op - PUSH_VVV - 16,
                                 x = floor(o / 4) + 1,
                                 t = o % 4,
                                 c = 93 ** x,
@@ -585,8 +609,8 @@ function exec(opcodes) {
                                 }
                             }
 
-                        } else if (op >= PUSHV) {
-                            let o = op - PUSHV,
+                        } else if (op >= PUSH_VVV) {
+                            let o = op - PUSH_VVV,
                                 x = floor(o / 4) + 1,
                                 t = o % 4,
                                 c = 93 ** x
@@ -604,7 +628,7 @@ function exec(opcodes) {
                             // DEBUG vm ops
                             //if (debug) {
                             //    const fn = ops[op]
-                            //    if (!fn) throw `no function for op [${op}] - [${opsRef[op]}]`
+                            //    if (!fn) throw `no function for op [${op}] - [${ref[op]}]`
                             //}
                             ops[op]()
                         }
@@ -613,10 +637,10 @@ function exec(opcodes) {
         }
     } catch(e) {
         // DEBUG vm
-        log(`[!!!] ERROR @${i-1}: #${op}/${lib.screw.ops.opsRef[op]}`)
+        log(`[!!!] ERROR @${i-1}: #${op}/${lib.screw.ops.ref[op]}`)
         log(opcodes.raw.join(''))
         console.dir(opcodes)
-        log(opcodes.map(op => lib.screw.ops.opsRef[op]).join('\n'))
+        log(opcodes.map(op => lib.screw.ops.ref[op]).join('\n'))
         console.log('definitions:')
         console.dir(def)
         throw e
@@ -625,7 +649,7 @@ function exec(opcodes) {
 }
 
 function resetEmuState() {
-    def = []
+    def   = []
     brews = []
 }
 

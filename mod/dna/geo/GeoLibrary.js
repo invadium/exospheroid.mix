@@ -25,7 +25,6 @@ class GeoLibrary extends sys.Frame {
     }
 
     attachMesh(mesh) {
-        log('!!!!!!!!!!!!! attaching ' + mesh.name)
         this.mesh.attach( mesh )
     }
 

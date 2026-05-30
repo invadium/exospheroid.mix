@@ -1,5 +1,10 @@
 // screw vm operation codes reference table
-const opsRef = [
+//
+// === How to Extend ===
+//       * include the operator function into the ops array in unscrew (future screwdriver)
+//       * insert the op name in the ops.ref manifest at the matching position (== ops array index) => must be indexed automatically
+// TODO derive from ops definition
+const ref = [
     // mnemonics
     'neogeo',
     'drop',
@@ -51,10 +56,10 @@ const opsRef = [
     //'ring',
     //'tetrahedron',
     //'cone',
-    //'dump',
+    'dump',
     //'dumpv',
 
-    // ghost codes
+    // ghost codes with special implementation
     // [!] not in the VMs ops manifest
     'pushs',
     'def',
@@ -101,12 +106,29 @@ const opsRef = [
     'push4dv',
     'push4uv',
 ]
-// screw script mnemonics catalog
-const mnemonics = opsRef.slice(0, opsRef.indexOf('pushs'))
+
+const PUSHS = ref.indexOf('pushs')
+const DEF   = ref.indexOf('def')
+const END   = ref.indexOf('end')
+const CALL  = ref.indexOf('call')
+
+// markers
+const PUSH_VVV = ref.indexOf('push1i')
+const SPECIAL  = PUSHS
+
+// screw script mnemonics catalog - every single opcode up to "pushs"
+const mnemonics = ref.slice(0, SPECIAL)
 
 if (typeof module !== 'undefined') {
     module.exports = {
-        opsRef,
+        ref,
         mnemonics,
+
+        SPECIAL,
+        PUSHS,
+        DEF,
+        END,
+        CALL,
+        PUSH_VVV,
     }
 }

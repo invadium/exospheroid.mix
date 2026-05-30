@@ -44,7 +44,6 @@ class GeoSpinner {
     }
 
     geoShape(g) {
-        console.dir(g)
         return lab.port.attach( new dna.shape.Form({
             name:        g.name,
             pos:         vec3(),

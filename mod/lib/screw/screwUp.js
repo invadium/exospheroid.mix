@@ -1,8 +1,13 @@
+// ScrewUp is a bytecode compiler for screw script you can find in .up files.
+// 
+// It receives a string of screw source as an input
+// and produces a sequence of opcodes.
+//
 let ops, opsRef, mnemonics
 
 if (typeof module !== 'undefined') {
     ops = require('/lib/screw/ops')
-    opsRef = ops.opsRef
+    opsRef = ops.ref
     mnemonics = ops.mnemonics
 }
 
