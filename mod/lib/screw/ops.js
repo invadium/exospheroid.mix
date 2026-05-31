@@ -42,11 +42,13 @@ const ref = [
     'tri',
     'tuv',
     'mt',           // define the material
-    'plane',
+
+    'quad',
     'cube',
     'sphere',
-    'cylinder',
     'circle',
+    'tube',
+    'cylinder',
 
     // finalizer
     'bounds',

@@ -1,9 +1,10 @@
 === different shapes ===
 
-neogeo cylinder "exoCylinder"   name brew
-neogeo circle   "exoCircle"     name brew
+neogeo quad     "exoQuad"       name brew
 neogeo cube     "exoCube"       name brew
-neogeo plane    "exoPlane"      name brew
+neogeo circle   "exoCircle"     name brew
+neogeo tube     "exoTube"       name brew
+neogeo cylinder "exoCylinder"   name brew
 
 dump
 

@@ -117,6 +117,7 @@ function vx(x, y, z) {
     g.vertices.push(v[2])
 }
 
+/*
 // append the array of vertices to the current mesh through the current modeling matrix
 function wx(w) {
     for (let i = 0; i < w.length; i += 3) {
@@ -127,6 +128,7 @@ function wx(w) {
         g.vertices.push(v[2])
     }
 }
+*/
 
 // apply geo transformations to nx before pushing in
 function nx(x, y, z) {
@@ -276,8 +278,8 @@ const ops = [
     },
 
     // === basic geometries ===
-    function plane() {
-        g.vertices = g.vertices.concat([
+    function quad() {
+        wM([
             -1, 0,-1,  1, 0, 1,  1, 0,-1,    
             -1, 0,-1, -1, 0, 1,  1, 0, 1
         ])
@@ -327,7 +329,6 @@ const ops = [
             }
         }
         */
-        return this
     },
     function sphere() {
         const v = [], w = []
@@ -371,8 +372,66 @@ const ops = [
                 )
             }
         }
-        wx(w)
-        // g.vertices = g.vertices.concat(w)
+        wM(w)
+    },
+    function circle() {
+        const v = [], w = []
+
+        for (let lon = 0; lon < P; lon++) {
+            let phi = (lon * PI2) / P,
+                c = cos(phi),
+                s = sin(phi)
+            v.push(c, 1, s)
+        }
+
+        for (let lon = 0; lon < P; lon++) {
+                let at = lon * 3,
+                    at2 = ((lon + 1) % P) * 3
+
+                w.push(
+                    v[at2], 0,  v[at2+2],
+                    0,      0,  0,
+                    v[at],  0,  v[at+2]
+                )
+        }
+        wM(w)
+    },
+    function tube() {
+        const v = [], w = []
+
+        for (let lon = 0; lon < P; lon++) {
+            let phi = (lon * PI2) / P,
+                c = cos(phi),
+                s = sin(phi)
+            v.push(c, 1, s)
+        }
+
+        for (let lon = 0; lon < P; lon++) {
+
+                let at = lon * 3,
+                    at2 = ((lon + 1) % P) * 3
+
+                w.push(
+                    v[at],   1,  v[at+2],
+                    v[at2],  1,  v[at2+2],
+                    v[at],  -1,  v[at+2],
+
+                    v[at2],  1,  v[at2+2],
+                    v[at2], -1,  v[at2+2],
+                    v[at],  -1,  v[at+2],
+
+                    /*
+                    v[at],   1,  v[at+2],
+                    0,       1,  0,
+                    v[at2],  1,  v[at2+2],
+
+                    v[at2], -1,  v[at2+2],
+                    0,      -1,  0,
+                    v[at],  -1,  v[at+2]
+                    */
+                )
+        }
+        wM(w)
     },
     function cylinder() {
         const v = [], w = []
@@ -407,31 +466,7 @@ const ops = [
                     v[at],  -1,  v[at+2]
                 )
         }
-        g.vertices = g.vertices.concat(w)
-    },
-    function circle() {
-        const v = [], w = []
-
-        for (let lon = 0; lon < P; lon++) {
-            let phi = (lon * PI2) / P,
-                c = cos(phi),
-                s = sin(phi)
-            v.push(c, 1, s)
-        }
-
-        for (let lon = 0; lon < P; lon++) {
-                let at = lon * 3,
-                    at2 = ((lon + 1) % P) * 3
-
-                w.push(
-                    v[at2], 0,  v[at2+2],
-                    0,      0,  0,
-                    v[at],  0,  v[at+2]
-                )
-        }
         wM(w)
-        //g.vertices = g.vertices.concat(w)
-        return this
     },
 
     // === finalizer ===
