@@ -182,7 +182,9 @@ const ops = [
         wM(b)
     },
     // HPI (Half PI) - push half PI
-    function HPI() { s.push( PI/2 ) },
+    function PI()  { s.push( math.PI ) },
+    function HPI() { s.push( math.PI/2 ) },
+    function TAU() { s.push( TAU ) },
     function add() { s.push( pop() + pop() ) },
     function sub() {
         x = pop()
@@ -203,7 +205,7 @@ const ops = [
     // mid - set identity matrix
     function mid() { M = mat4.identity() },
     function mscale() { mat4.scale(M, pv3()) },
-    function mtranslate() { mat4.translate(M, pv3()) },
+    function translate() { mat4.translate(M, pv3()) },
     function mrotX() { mat4.rotX(M, pop()) },
     function mrotY() { mat4.rotY(M, pop()) },
     function mrotZ() { mat4.rotZ(M, pop()) },

@@ -1,0 +1,24 @@
+
+block: -- provide rot value
+    mid
+    dump
+    mrotX
+    0 0 2 translate
+    .77 .6 .14 mscale
+    cube
+;
+
+neogeo
+
+0           block
+HPI 2.0 div block
+HPI         block
+HPI 1.5 mul block
+PI          block
+HPI 2.5 mul block
+HPI 3.0 mul block
+HPI 3.5 mul block
+
+-- think of Yoda when pronounce these commands:
+"bus" name brew
+
