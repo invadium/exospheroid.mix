@@ -117,6 +117,17 @@ function vx(x, y, z) {
     g.vertices.push(v[2])
 }
 
+// append the array of vertices to the current mesh through the current modeling matrix
+function wx(w) {
+    for (let i = 0; i < w.length; i += 3) {
+        const v = vec3(w[i], w[i+1], w[i+2])
+        vec3.applyMat4(v, v, M)
+        g.vertices.push(v[0])
+        g.vertices.push(v[1])
+        g.vertices.push(v[2])
+    }
+}
+
 // apply geo transformations to nx before pushing in
 function nx(x, y, z) {
     const v = vec3(x, y, z)
@@ -360,7 +371,8 @@ const ops = [
                 )
             }
         }
-        g.vertices = g.vertices.concat(w)
+        wx(w)
+        // g.vertices = g.vertices.concat(w)
     },
     function cylinder() {
         const v = [], w = []
