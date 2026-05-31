@@ -516,6 +516,8 @@ const ops = [
         dumpVM()
     },
 ]
+const action = {}
+ops.forEach(op => action[op.name] = op)
 
 // === SCREW VM ===
 let def = {}, cdef, brews = []
@@ -697,12 +699,13 @@ function exec(opcodes) {
 function resetEmuState() {
     def   = []
     brews = []
+    action.mid()
 }
 
-function unscrew(enops) {
-    // if (debug) log(`unscrewing:[${enops}](${enops.length})`)
-    resetEmuState()
-    return exec( unscrewOpcodes( enops.split('') ) )
+function unscrew(runes, continuation) {
+    // if (debug) log(`unscrewing:[${runes}](${runes.length})`)
+    if (!continuation) resetEmuState()
+    return exec( unscrewOpcodes( runes.split('') ) )
 }
 
 function getLibrary() {
@@ -715,8 +718,8 @@ function setLibrary(l) {
 
 if (env.config.debug) {
 
-    function unscrewOne(enops) {
-        return unscrew(enops).pop()
+    function unscrewOne(runes) {
+        return unscrew(runes).pop()
     }
 
     extend(unscrew, {

@@ -12,12 +12,20 @@ include::../src/dish.up[]
 
 
 
-===
+=== Power of Slang
 
-3D API in existing engines and frameworks provide somewhat similar capabilities to generate geometry. You also can create strips of triangles, spheres and cylinders.
+3D API in existing engines and frameworks provides somewhat similar capabilities to generate geometry. You also can create strips of triangles, spheres and cylinders.
 
-But we belive CorkScrew provides something deeper and more powerful. It provides the language and the environment to talk and reason about geometry. It is a true power of DSL that no API can achieve in a million years. No PDF generation library can match PostScript in power and expressiveness. No regular expression API can match AWK in how simple in can match and process text.
+But we believe CorkScrew provides something deeper and more powerful. It provides the language and the environment to talk and reason about geometry. It is a true power of DSL that no API can achieve in a million years. No PDF generation library can match PostScript in power and expressiveness. No regular expression API can match AWK in how simple in can match and process text.
 
 LLMs clearly show that language plays a crucial role in human reasoning and CorkScrew gives a language to reason about procedural geometry. To reason about things you need to name them first. And APIs are limited in ways how things can be named and structured.
 
 Name, structure, remix.
+
+
+=== Color
+
+
+=== Materials
+
+
