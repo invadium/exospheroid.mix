@@ -19,6 +19,7 @@ class OrbitalControllerPod {
             maxDist:          3,
             verticalTurnSpeed:   16 * PI,
             horizontalTurnSpeed: 420 * PI,
+            rollSpeed:           16 * PI,
 
             mouseCaptureMask: 2,
             moveOnClick:      true,
@@ -27,6 +28,7 @@ class OrbitalControllerPod {
             sensitivity: {
                 horizontal:   .005,
                 vertical:     .0025,
+                roll:         .005,
                 wheel:        .0001,
             },
 
@@ -134,6 +136,7 @@ class OrbitalControllerPod {
                 __.moveY(this.verticalTurnSpeed * factor * dt)
                 break
             case dry.ROLL:
+                __.roll(this.rollSpeed * factor * dt)
                 break
 
         }
@@ -186,11 +189,19 @@ class OrbitalControllerPod {
             const dx = e.movementX, dy = e.movementY
 
             if (dx) {
-                // cancel the opposite movement if necessary
-                if (dx < 0 && pushers[dry.YAW] > 0) pushers[dry.YAW] = 0
-                if (dx > 0 && pushers[dry.YAW] < 0) pushers[dry.YAW] = 0
-                // accumulate horizontal mouse movement
-                pushers[dry.YAW] -= dx * this.sensitivity.horizontal
+                if (e.shiftKey || e.ctrlKey) {
+                    // cancel the opposite movement if necessary
+                    if (dx < 0 && pushers[dry.ROLL] > 0) pushers[dry.ROLL] = 0
+                    if (dx > 0 && pushers[dry.ROLL] < 0) pushers[dry.ROLL] = 0
+                    // accumulate roll mouse movement
+                    pushers[dry.ROLL] -= dx * this.sensitivity.roll
+                } else {
+                    // cancel the opposite movement if necessary
+                    if (dx < 0 && pushers[dry.YAW] > 0) pushers[dry.YAW] = 0
+                    if (dx > 0 && pushers[dry.YAW] < 0) pushers[dry.YAW] = 0
+                    // accumulate horizontal mouse movement
+                    pushers[dry.YAW] -= dx * this.sensitivity.horizontal
+                }
             }
             if (dy) {
                 // cancel the opposite movement if necessary
