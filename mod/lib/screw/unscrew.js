@@ -171,6 +171,12 @@ const ops = [
         s.push(x)
         s.push(y)
     },
+    function dup() {
+        s.push( s[ s.length-1 ] )
+    },
+    function over() {
+        s.push( s[ s.length-2 ] )
+    },
     function mpush() { m.push( mat4.clone(M) ) },
     function mpop() { M = m.pop() },
     // cache current geometry in the buffer
@@ -492,6 +498,10 @@ const ops = [
         s = []
     },
     function name() { g.name = pop() },
+    function tag()  {
+        if (!g.tag) g.tag = {}
+        g.tag[ pop() ] = true
+    },
     function brew() {
         // normalize
         g.vertices = new Float32Array(g.vertices)
@@ -733,6 +743,7 @@ function exec(opcodes) {
                             //    const fn = ops[op]
                             //    if (!fn) throw `no function for op [${op}] - [${ref[op]}]`
                             //}
+                            if (!isFun(ops[op])) debugger
                             ops[op]()
                         }
                 }

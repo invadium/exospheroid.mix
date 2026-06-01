@@ -9,6 +9,8 @@ const ref = [
     'neogeo',
     'drop',
     'swap',
+    'dup',
+    'over',
     'mpush',
     'mpop',
     'buf',
@@ -58,6 +60,7 @@ const ref = [
     'bounds',
     'dat',
     'name',
+    'tag',
     'brew',
     'brewWires',
 

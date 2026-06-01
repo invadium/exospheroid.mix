@@ -27,9 +27,17 @@ To catch all missing uniform, use:
 jam -d --failOnMissingUniform
 ```
 
+Provide some tags to filter geometry:
+```
+jam -d --tags tech,space,weapon
+```
+
+
 ### Keystrokes
 
 ```
 Ctrl+V - switch camera mode from orbital to the free roaming and back
 Ctrl+B - switch to wireframe mode and back
+
+A/Z or Ctrl+Arrows - switch target model
 ```

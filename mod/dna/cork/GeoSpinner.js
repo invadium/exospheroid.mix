@@ -31,13 +31,27 @@ class GeoSpinner {
         const _ = this
         const shapes = this.shapes = []
 
+        function matchTag(g, tags) {
+            if (!g.tag) return false
+            for (let i = tags.length; i >= 0; i--) {
+                if (g.tag[ tags[i] ]) return true
+            }
+            return false
+        }
+
+        const tags = env.config.tags? env.config.tags.split(',') : null
         this.geoLibrary.mesh._ls.forEach((g) => {
-            const shape = _.geoShape(g)
-            shape.geo = g
-            g.shape = shape
-            shapes.push(shape)
+            if (!tags || matchTag(g, tags)) {
+                const shape = _.geoShape(g)
+                shape.geo = g
+                g.shape = shape
+                shapes.push(shape)
+            }
         })
-        console.dir(shapes)
+        log.raw(`-------------------------------------`)
+        log(`[geo-spinner] included shapes: ${shapes.length}`)
+        dir(shapes)
+        log.raw(`-------------------------------------`)
 
         this.placeInCircle()
         this.justifyForms()
@@ -205,7 +219,6 @@ class GeoSpinner {
         this.target ++
         if (this.target >= this.shapes.length) this.target = 0
         this.syncCamera()
-        log('target: ' + this.target)
     }
 
     targetPrev() {
@@ -213,13 +226,11 @@ class GeoSpinner {
         this.target --
         if (this.target < 0) this.target = this.shapes.length - 1
         this.syncCamera()
-        log('target: ' + this.target)
     }
 
     targetLast() {
         this.target = this.shapes.length - 1
         this.syncCamera()
-        log('target last: ' + this.target)
     }
 
     getTargetShape() {

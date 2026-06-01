@@ -24,5 +24,6 @@ mid
 unbuf
 
 -- think of Yoda when pronounce these commands:
+"probe" tag
 "bus" name brew
 
