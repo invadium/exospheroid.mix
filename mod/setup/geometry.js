@@ -1,4 +1,35 @@
+function unscrewScript(script) {
+    if (!script || script.unscrewed) return 
+    const { name, path, src, runes, dependencies } = script
+
+    // unscrew dependencies first
+    dependencies.forEach(d => unscrewByName(d))
+
+    log(`unscrewing [${path}.up]: ` + runes)
+    // unscrew runes without continuation
+    // (e.g. don't preserve screw VM state between script executions)
+    const res = lib.screw.unscrew( runes, false ) 
+    if (isArray(res)) {
+        script.geo = res
+        script.createdGeometries = res.length
+    }
+    script.unscrewed = true
+}
+
+function unscrewByName(name) {
+    const script = lib.geoLibrary.script[name]
+    if (!script) throw new Error(`expect unknown script [${name}]`)
+
+    unscrewScript(script)
+}
+
+function unscrewScripts(ls) {
+    ls.forEach(s => unscrewScript(s))
+}
+
 function geometry() {
+
+    unscrewScripts(lib.geoLibrary.script._ls)
 
     // generate meshes
     const sd = lib.screw.screwdriver

@@ -1,0 +1,14 @@
+#depends dish
+#depends bus
+
+neogeo
+
+-- place the main dish
+"dish" place
+
+-- shift and place the main bus
+0 .5 0 translate
+"bus"  place
+
+"probe" name brew
+

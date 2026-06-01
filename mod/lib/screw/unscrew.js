@@ -181,6 +181,12 @@ const ops = [
     function unbuf() {
         wM(b)
     },
+    function place() {
+        x = pop()
+        const mesh = library.mesh._dir[x]
+        if (!mesh) throw new Error(`can't find mesh [${x}]!`)
+        wM(mesh.vertices)
+    },
     // HPI (Half PI) - push half PI
     function PI()  { s.push( math.PI ) },
     function HPI() { s.push( math.PI/2 ) },

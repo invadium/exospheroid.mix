@@ -13,6 +13,8 @@ const ref = [
     'mpop',
     'buf',
     'unbuf',
+    'place',
+
     'PI',
     'HPI',
     'TAU',

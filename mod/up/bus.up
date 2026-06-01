@@ -1,4 +1,3 @@
-
 block: -- provide rot value
     mid
     dump
@@ -18,6 +17,11 @@ PI          block
 HPI 2.5 mul block
 HPI 3.0 mul block
 HPI 3.5 mul block
+
+buf
+mid
+.2 .2 .2 mscale
+unbuf
 
 -- think of Yoda when pronounce these commands:
 "bus" name brew

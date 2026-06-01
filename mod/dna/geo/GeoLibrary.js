@@ -22,6 +22,9 @@ class GeoLibrary extends sys.Frame {
         this.touch('data', {
             _attachPolicy: sys.Frame.REPLACE,
         })
+        this.touch('script', {
+            _attachPolicy: sys.Frame.REPLACE,
+        })
     }
 
     attachMesh(mesh) {
