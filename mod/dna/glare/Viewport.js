@@ -25,9 +25,9 @@ class Viewport extends sys.LabFrame {
         // define and clip the viewport
         glow.viewport(x, y, w, h)
         glow.clear()
+        glow.identity()
 
-        // TODO render the scenegraph
-        // ...
+        super.draw()
 
         // complete rendering and restore the rendering context to the initial state
         glow.flush()         

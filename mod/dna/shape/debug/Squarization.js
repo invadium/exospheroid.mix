@@ -12,7 +12,7 @@ class Squarization {
         this.boxes = []
         for (let i = 0; i < 79; i++) {
             const side = RND(20, 200)
-            const color = vec4.rgba( hsl(rnd(), .5, .5) )
+            const color = vec4ext.rgba( hsl(rnd(), .5, .5) )
             this.boxes.push({
                 x: RND(gl.canvas.width  - 100),
                 y: RND(gl.canvas.height - 100),

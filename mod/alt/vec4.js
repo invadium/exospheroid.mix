@@ -1,21 +1,40 @@
-// ===========================
-// 4D Vector Operations
-// ===========================
+// Interface for 4D Vector Operations
 
 // create a new vec4 initialized by provided x,y,z,w values
 //
-// @param {number} x
-// @param {number} y
-// @param {number} z
-// @param {number} w
+// @param {number/optional} x
+// @param {number/optional} y
+// @param {number/optional} z
+// @param {number/optional} w
 // @returns {Float32Array} a new vec4 array
 function create(x, y, z, w) {
     const nv = new Float32Array(4)
-    nv[0] = x
-    nv[1] = y
-    nv[2] = z
-    nv[3] = w
+
+    nv[0] = x ?? 0
+    nv[1] = y ?? 0
+    nv[2] = z ?? 0
+    nv[3] = w ?? 1
+
     return nv
+}
+
+// create and register a new 4D vector array
+//
+// @param {number/optional} x
+// @param {number/optional} y
+// @param {number/optional} z
+// @param {number/optional} w
+// @param {array/vec2} rv - the receiving 2D vector array
+function xcreate(x, y, z, w) {
+    const nv = new Float32Array(4)
+
+    nv[0] = x ?? 0
+    nv[1] = y ?? 0
+    nv[2] = z ?? 0
+    nv[3] = w ?? 1
+    this.rx = nv
+
+    return this
 }
 
 // set values of a vec4 array components to zero
@@ -27,10 +46,12 @@ function zero(rv) {
     rv[1] = 0
     rv[2] = 0
     rv[3] = 0
+
     return this
 }
 
-// create and return new zero-valued vec4 array
+// create and return new zero-filled vec4 array
+//
 // @returns {Float32Array} a new vec4 array with 0 values
 function izero() {
     return new Float32Array(4)
@@ -48,6 +69,7 @@ function unit(rv, theta, kappa, phi) {
     rv[1] = sin(theta) * sin(kappa) * sin(phi)
     rv[2] = sin(theta) * cos(kappa)
     rv[3] = cos(theta)
+
     return this
 }
 
@@ -59,10 +81,12 @@ function unit(rv, theta, kappa, phi) {
 // @returns {Float32Array} a new 4D unit vector
 function iunit(theta, kappa, phi) {
     const nv = new Float32Array(4)
+
     nv[0] = sin(theta) * sin(kappa) * cos(phi)
     nv[1] = sin(theta) * sin(kappa) * sin(phi)
     nv[2] = sin(theta) * cos(kappa)
     nv[3] = cos(theta)
+
     return nv
 }
 
@@ -72,10 +96,12 @@ function iunit(theta, kappa, phi) {
 // @returns {array/vec4} the cloned 4D vector
 function clone(iv) {
     const nv = new Float32Array(4)
+
     nv[0] = iv[0]
     nv[1] = iv[1]
     nv[2] = iv[2]
     nv[3] = iv[3]
+
     return nv
 }
 
@@ -85,10 +111,11 @@ function clone(iv) {
 // @param {array/vec4} iv - a source 4D vector array
 // @returns {obj/lib/vec4} vec4 library object for chaining
 function copy(rv, iv) {
-    rv[0] = iv[0]
-    rv[1] = iv[1]
-    rv[2] = iv[2]
-    rv[3] = iv[3]
+    rv[0] = iv[0] ?? rv[0]
+    rv[1] = iv[1] ?? rv[1]
+    rv[2] = iv[2] ?? rv[2]
+    rv[3] = iv[3] ?? rv[3]
+
     return this
 }
 
@@ -101,30 +128,12 @@ function copy(rv, iv) {
 // @param {number} w - 4D vector w component
 // @returns {obj/lib/vec4} vec4 library object for chaining
 function set(rv, x, y, z, w) {
-    rv[0] = x
-    rv[1] = y
-    rv[2] = z
-    rv[3] = w
+    rv[0] = x ?? rv[0]
+    rv[1] = y ?? rv[1]
+    rv[2] = z ?? rv[2]
+    rv[3] = w ?? rv[3]
     return this
 }
-
-function _x2d(x) {
-    let d = x.charCodeAt(0) - 48
-    return d > 9? d - 7 : d
-}
-
-function __rgb__(hex) {
-    if (hex.startsWith('#')) hex = hex.substring(1)
-    const d = hex.toUpperCase().split('').map(c => _x2d(c))
-    return create((16*d[0]+d[1])/255, (16*d[2]+d[3])/255, (16*d[4]+d[5])/255, 1)
-}
-
-function __rgba__(hex) {
-    if (hex.startsWith('#')) hex = hex.substring(1)
-    const d = hex.toUpperCase().split('').map(c => _x2d(c))
-    return create((16*d[0]+d[1])/255, (16*d[2]+d[3])/255, (16*d[4]+d[5])/255, (16*d[6]+d[7])/255)
-}
-
 
 // add two vec4 arrays
 //
@@ -306,6 +315,27 @@ function cdiv(rv, iv, x, y, z, w) {
     return this
 }
 
+// dot product of two 4D vectors
+//
+// @param {array/vec4} iv1 - the first 4D vector operand
+// @param {array/vec4} iv2 - the second 4D vector operand
+// @returns {number} the dot product of two 4D vectors
+function dot(iv1, iv2) {
+    return (iv1[0] * iv2[0]  +  iv1[1] * iv2[1]  +  iv1[2] * iv2[2]  +  iv1[3] * iv2[3])
+}
+
+// dot product between the source 4D vector and the components of another 4D vector
+//
+// @param {array/vec4} iv1 - the first 4D vector operand
+// @param {number} x - the second 4D vector x component
+// @param {number} y - the second 4D vector y component
+// @param {number} z - the second 4D vector z component
+// @param {number} w - the second 4D vector w component
+// @returns {number} the dot product
+function cdot(iv, x, y, z, w) {
+    return (iv[0] * x  +  iv[1] * y  +  iv[2] * z  +  iv[3] * w)
+}
+
 // shift components of a vec4 with provided x/y/z/w values (alias to cadd) 
 //
 // @param {array/vec4} rv - the receiving 4D vector
@@ -397,6 +427,38 @@ function ishrink(iv, scalar) {
     nv[3] = iv[3] * nfactor
     return nv
 }
+
+// magnify the second 4D vector array by a scalar value and add the result to the first 4D vector
+//
+// @param {array/vec4} rv - the receiving 4D vector array
+// @param {array/vec4} iv1 - the source 4D vector to add to
+// @param {array/vec4} iv2 - the source 4D vector to scale
+// @param {number} scalar
+// @returns {obj/lib/vec4} vec4 library object for chaining
+function scaleAndAdd(rv, iv1, iv2, scalar) {
+    rv[0] = iv1[0] + iv2[0] * scalar
+    rv[1] = iv1[1] + iv2[1] * scalar
+    rv[2] = iv1[2] + iv2[2] * scalar
+    rv[3] = iv1[3] + iv2[3] * scalar
+    return this
+}
+
+// magnify the second 4D vector array by a scalar value and add to the first 4D vector
+// into a new vector
+//
+// @param {array/vec4} iv1 - the source 4D vector to add to
+// @param {array/vec4} iv2 - the source 4D vector to scale
+// @param {number} scalar
+// @returns {array/vec4} the created output 4D vector array
+function iscaleAndAdd(iv1, iv2, scalar) {
+    const nv = new Float32Array(4)
+    nv[0] = iv1[0] + iv2[0] * scalar
+    nv[1] = iv1[1] + iv2[1] * scalar
+    nv[2] = iv1[2] + iv2[2] * scalar
+    nv[3] = iv1[3] + iv2[3] * scalar
+    return nv
+}
+
 
 // negate a 4D vector array
 //
@@ -576,11 +638,112 @@ function inormalize(iv) {
     return nv
 }
 
+// transform the 4D vector with the provided rotation mat3 into the receiving 4D vector array
+//
+// @param {array/vec3} rv - the receiving 4D vector array
+// @param {array/vec3} iv - the source 4D vector array
+// @param {array/mat3} tm - the transformation 3x3 matrix array
+// @returns {obj/lib/vec4} vec4 library object
+function applyMat3(rv, iv, tm) {
+    const x = iv[0], y = iv[1], z = iv[2]
+
+    rv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]
+    rv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]
+    rv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]
+
+    return this
+}
+
+// transform the 4D vector with the provided transformation mat3 into a new 4D vector array
+//
+// @param {array/vec3} iv - the source 4D vector array
+// @param {array/mat3} tm - the transformation 3x3 matrix array
+// @returns {obj/lib/vec3} the newly created 4D vector array
+function iapplyMat3(iv, tm) {
+    const nv = new Float32Array(4)
+    const x = iv[0], y = iv[1], z = iv[2]
+
+    nv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]
+    nv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]
+    nv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]
+
+    return nv
+}
+
+// transform the 4D vector with the provided transformation mat43 into the receiving 4D vector array
+//
+// TODO figure out if we need to factor [w !== 1] in this case
+//
+// @param {array/vec3} rv - the receiving 4D vector array
+// @param {array/vec3} iv - the source 4D vector array
+// @param {array/mat43} tm - the transformation 4x3 matrix array
+// @returns {obj/lib/vec4} vec3 library object
+function applyMat43(rv, iv, tm) {
+    const x = iv[0], y = iv[1], z = iv[2], w = iv[3]
+
+    rv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]  +  w * tm[9 ]
+    rv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]  +  w * tm[10]
+    rv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]  +  w * tm[11]
+
+    return this
+}
+
+// transform the 4D vector with the provided transformation mat43 into a new 4D vector array
+//
+// @param {array/vec3} iv - the source 4D vector array
+// @param {array/mat43} tm - the transformation 4x3 matrix array
+// @returns {obj/vec4} the newly created 4D vector array
+function iapplyMat43(iv, tm) {
+    const nv = new Float32Array(4)
+    const x = iv[0], y = iv[1], z = iv[2], w = iv[3]
+
+    nv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]  +  w * tm[9 ]
+    nv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]  +  w * tm[10]
+    nv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]  +  w * tm[11]
+
+    return nv
+}
+
+// transform the 4D vector with the provided transformation mat4 into the receiving 4D vector array
+//
+// @param {array/vec4} rv - the receiving 4D vector array
+// @param {array/vec4} iv - the source 4D vector array
+// @param {array/mat4} tm - the transformation 4x4 matrix array
+// @returns {obj/lib/vec4} vec4 library object
+function applyMat4(rv, iv, tm) {
+    const x = iv[0], y = iv[1], z = iv[2], w = iv[3]
+
+    rv[0] = x * tm[0]  +  y * tm[4]  +  z * tm[8 ]  +  tm[12] * w
+    rv[1] = x * tm[1]  +  y * tm[5]  +  z * tm[9 ]  +  tm[13] * w
+    rv[2] = x * tm[2]  +  y + tm[6]  +  z * tm[10]  +  tm[14] * w
+    rv[3] = x * tm[3]  +  y + tm[7]  +  z * tm[11]  +  tm[15] * w
+
+    return this
+}
+
+// transform the 4D vector with the provided transformation mat4 into a new 4D vector array
+//
+// @param {array/vec4} iv - the source 4D vector array
+// @param {array/mat4} tm - the transformation 4x4 matrix array
+// @returns {obj/vec4} the newly created 4D vector array
+function iapplyMat4(iv, tm) {
+    const nv = new Float32Array(4)
+    const x = iv[0], y = iv[1], z = iv[2], w = iv[3]
+
+    nv[0] = x * tm[0]  +  y * tm[4]  +  z * tm[8 ]  +  tm[12] * w
+    nv[1] = x * tm[1]  +  y * tm[5]  +  z * tm[9 ]  +  tm[13] * w
+    nv[2] = x * tm[2]  +  y + tm[6]  +  z * tm[10]  +  tm[14] * w
+    nv[3] = x * tm[3]  +  y + tm[7]  +  z * tm[11]  +  tm[15] * w
+
+    return nv
+}
+
+
 // linear interpolation between two 4D vectors
 //
 // @param {array/vec4} rv - the receiving 4D vector array
-// @param {array/vec4} iv1 - the first vec3(immutable)
-// @param {array/vec4} iv2 - the second vec3(immutable)
+// @param {array/vec4} iv1 - the first vec4(immutable)
+// @param {array/vec4} iv2 - the second vec4(immutable)
 // @param {number} t - the interpolation amount between inputs [0 - 1]
 // @returns {obj/lib/vec4} vec4 library object for chaining
 function __lerp__(rv, iv1, iv2, t) {
@@ -610,6 +773,28 @@ function dist(iv1, iv2) {
 // @param {array/vec4} iv2 - the second operand (immutable)
 // @returns {number} squared euclidian distance between iv1 and iv2
 function distSq(iv1, iv2) {
+    const dx = iv1[0] - iv2[0]
+    const dy = iv1[1] - iv2[1]
+    const dz = iv1[2] - iv2[2]
+    const dw = iv1[3] - iv2[3]
+    return (dx * dx + dy * dy + dz * dz + dw * dw)
+}
+
+// euclidian distance between two 4D vectors
+//
+// @param {array/vec4} iv1 - the first operand (immutable)
+// @param {array/vec4} iv2 - the second operand (immutable)
+// @returns {number} euclidian distance between iv1 and iv2
+function __distance__(iv1, iv2) {
+    return Math.hypot(iv1[0] - iv2[0], iv1[1] - iv2[1], iv1[2] - iv2[2], iv1[3] - iv2[3])
+}
+
+// squared euclidian distance between two 4D vectors
+//
+// @param {array/vec4} iv1 - the first operand (immutable)
+// @param {array/vec4} iv2 - the second operand (immutable)
+// @returns {number} squared euclidian distance between iv1 and iv2
+function distanceSq(iv1, iv2) {
     const dx = iv1[0] - iv2[0]
     const dy = iv1[1] - iv2[1]
     const dz = iv1[2] - iv2[2]
@@ -671,8 +856,14 @@ function isetMag(iv, mag) {
 
 // length(magnitude) of a 4D vector
 //
-// @param {array/vec3/immutable} iv - the source 3D vector
-// @returns {number} the length(magnitude) of the provided 3D vector
+// _API Note: We can't provide the .length() alias
+// due to the existing .length() method on every function object.
+// Don't be misled by the presence of .length() in vec2 -
+// it doesn't return a vector length, but the length of
+// the function's argument list._
+//
+// @param {array/vec4/immutable} iv - the source 4D vector array
+// @returns {number} the length(magnitude) of the provided 4D vector
 function len(iv) {
     return Math.hypot(iv[0], iv[1], iv[2], iv[3])
 }
@@ -684,7 +875,6 @@ function len(iv) {
 function lenSq(iv) {
     return (iv[0] * iv[0] + iv[1] * iv[1] + iv[2] * iv[2] + iv[3] * iv[3])
 }
-
 
 // test if two 4D vectors have equal components
 //
@@ -702,7 +892,7 @@ function equals(iv1, iv2) {
 // @param {number} epsilon - (optional) precision factor for near-comparison
 // @returns {boolean} true if vectors components are near-equal, false otherwise
 function near(iv1, iv2, epsilon) {
-    epsilon = epsilon || EPSILON
+    epsilon = epsilon ?? EPSILON
     const x1 = iv1[0], y1 = iv1[1], z1 = iv1[2], w1 = iv1[3]
     const x2 = iv2[0], y2 = iv2[1], z2 = iv2[2], w2 = iv2[3]
     return (
@@ -713,26 +903,146 @@ function near(iv1, iv2, epsilon) {
     )
 }
 
-// get a 4D vector array string dump
+// map a 4D vector array into a target object with optional names
+//
+// @param {object} tar - the target object to map vec4 values into
+// @param {array/vec4/immutable} iv - the source 4D vector
+// @param {string} xn - optional property name for the x component ("x" by default)
+// @param {string} yn - optional property name for the y component ("y" by default)
+// @param {string} zn - optional property name for the z component ("z" by default)
+// @param {string} wn - optional property name for the w component ("w" by default)
+// @returns {obj/lib/vec4} vec4 library object for chaining
+function map(tar, iv, xn, yn, zn, wn) {
+    xn = xn || 'x'
+    yn = yn || 'y'
+    zn = zn || 'z'
+    wn = wn || 'w'
+
+    tar[xn] = iv[0]
+    tar[yn] = iv[1]
+    tar[zn] = iv[2]
+    tar[wn] = iv[3]
+
+    return this
+}
+
+// map a 4D vector array into the new target object with optional names
 //
 // @param {array/vec4/immutable} iv - the source 4D vector
-// @returns {string} the 4D vector string representation
-function str(iv) {
-    return `vec4[${iv[0]}, ${iv[1]}, ${iv[2]}, ${iv[3]}]`
+// @param {string} xn - optional property name for the x component ("x" by default)
+// @param {string} yn - optional property name for the y component ("y" by default)
+// @param {string} yn - optional property name for the z component ("z" by default)
+// @param {string} wn - optional property name for the w component ("w" by default)
+// @returns {obj} created object with mapped 4D vector values
+function imap(iv, xn, yn, zn, wn) {
+    const out = {}
+    xn = xn || 'x'
+    yn = yn || 'y'
+    zn = zn || 'z'
+    wn = wn || 'w'
+
+    out[xn] = iv[0]
+    out[yn] = iv[1]
+    out[zn] = iv[2]
+    out[wn] = iv[3]
+
+    return out
+}
+
+// decode (deconstruct) an object with 4D vector data into the target 4D vector array
+//
+// @param {array/vec4} rv - the receiving 4D vector array
+// @param {object} io - the input object with 4D vector data
+// @param {string} xn - the optional property name for the 'x' value
+// @param {string} yn - the optional property name for the 'y' value
+// @param {string} zn - the optional property name for the 'z' value
+// @param {string} wn - the optional property name for the 'w' value
+// @returns {obj/lib/vec4} vec4 library object for chaining
+function decode(rv, io, xn, yn, zn, wn) {
+    xn = xn ?? 'x'
+    yn = yn ?? 'y'
+    zn = zn ?? 'z'
+    wn = wn ?? 'w'
+
+    rv[0] = io[xn] ?? rv[0]
+    rv[1] = io[yn] ?? rv[1]
+    rv[2] = io[zn] ?? rv[2]
+    rv[3] = io[wn] ?? rv[3]
+
+    return this
+}
+
+// decode (deconstruct) an object with 4D vector data into the new 3D vector array
+//
+// @param {object} io - the input object with 4D vector data
+// @param {string} xn - the optional property name for the 'x' value
+// @param {string} yn - the optional property name for the 'y' value
+// @param {string} zn - the optional property name for the 'z' value
+// @param {string} wn - the optional property name for the 'w' value
+// @returns {array} created 4D vector array with deconstructed data
+function idecode(io, xn, yn, zn, wn) {
+    const nv = new Float32Array(4)
+
+    xn = xn ?? 'x'
+    yn = yn ?? 'y'
+    zn = zn ?? 'z'
+    wn = wn ?? 'w'
+
+    nv[0] = io[xn] ?? 0
+    nv[1] = io[yn] ?? 0
+    nv[2] = io[zn] ?? 0
+    nv[3] = io[wn] ?? 0
+
+    return nv
+}
+
+// transform a 4D vector into an object {x, y, z, w}
+// 
+// @param {array/vec4/immutable} iv - the source 4D vector
+// @returns {object} the transformed object with {x, y, z, w} coordinates defined
+function obj(iv) {
+    return {
+        x: iv[0],
+        y: iv[1],
+        z: iv[2],
+        w: iv[3]
+    }
 }
 
 // get 4D vector array string representation
 //
 // @param {array/vec4/immutable} iv - the source 4D vector
 // @returns {string} the 4D vector array data string representation
-function toString(iv) {
+function str(iv) {
     return `[${iv[0]}, ${iv[1]}, ${iv[2]}, ${iv[3]}]`
+}
+
+// get a 4D vector array formatted string representation
+//
+// @param {array/vec4/immutable} iv - the source 4D vector
+// @param {string} s - optional separator
+// @param {string} p - optional prefix
+// @param {string} x - optional suffix
+// @returns {string} the formatted 4D vector string
+function fmt(iv, s, p, x) {
+    s = s ?? ', '
+    p = p ?? '['
+    x = x ?? ']'
+    return `${p}${iv[0]}${s}${iv[1]}${s}${iv[2]}${s}${iv[3]}${x}`
+}
+
+// get a 4D vector array string dump
+//
+// @param {array/vec4/immutable} iv - the source 4D vector
+// @returns {string} the 4D vector string representation
+function dump(iv) {
+    return `vec4[${iv[0]}, ${iv[1]}, ${iv[2]}, ${iv[3]}]`
 }
 
 // validate that provided object is a proper 4D vector
 //
 // @param {array/vec4/immutable} iv - the source 4D vector
-// @returns {boolean} true if a valid 4D vector array provided, false overwise
+// @returns {boolean} true if a valid 4D vector array provided, false otherwise
 function validate(iv) {
     const TypedArray = Object.getPrototypeOf(Uint8Array)
     if (!Array.isArray(iv) && !(iv instanceof TypedArray)) return false
@@ -745,6 +1055,8 @@ function validate(iv) {
 
 // assert a 4D vector, throws an error when the vector is malformed
 //
+// Any 4D vector is required to have 4 number components.
+//
 // @param {array/vec4/immutable} iv - the source 4D vector
 // @returns {obj/lib/vec4} vec4 library object for chaining
 function __assert__(iv, tag) {
@@ -755,7 +1067,7 @@ function __assert__(iv, tag) {
     for (let i = 0; i < 4; i++) {
         const e = iv[i]
         if (e == null || !Number.isFinite(e)) {
-            throw new Error(`[${tag}][#${i+1}] component is expected to be a number, but [${e}] found!`)
+            throw new Error(`[${tag}]#${i+1} component is expected to be a number, but [${e}] found!`)
         }
     }
     return this
@@ -827,7 +1139,10 @@ function vec4(x, y, z, w) {
 }
 
 extend(vec4, {
+    rx: create(),
+
     create,
+    xcreate,
     zero,
     izero,
     unit,
@@ -835,8 +1150,8 @@ extend(vec4, {
     clone,
     copy,
     set,
-    rgb: __rgb__,
-    rgba: __rgba__,
+    // TODO must be another implementation that requires values (no optional x/y...)
+    from: create,
 
     add,
     iadd,
@@ -850,6 +1165,8 @@ extend(vec4, {
     div,
     idiv,
     cdiv,
+    dot,
+    cdot,
 
     shift,
     ishift,
@@ -857,6 +1174,8 @@ extend(vec4, {
     iscale: iscale,
     shrink,
     ishrink,
+    scaleAndAdd,
+    iscaleAndAdd,
     negate,
     inegate,
     inverse,
@@ -870,9 +1189,18 @@ extend(vec4, {
     normalize,
     inormalize,
 
+    applyMat3,
+    iapplyMat3,
+    applyMat43,
+    iapplyMat43,
+    applyMat4,
+    iapplyMat4,
+
     lerp: __lerp__,
     dist,
     distSq,
+    distance: __distance__,
+    distanceSq: distanceSq,
 
     mag,
     setMag,
@@ -881,10 +1209,16 @@ extend(vec4, {
     lenSq,
     equals,
     near,
+
+    map,
+    imap,
+    decode,
+    idecode,
+    obj,
     str,
-    toString,
+    fmt,
+    dump,
     validate,
     assert: __assert__,
 })
 math.vec4 = vec4
-

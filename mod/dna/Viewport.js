@@ -77,7 +77,7 @@ class Viewport extends sys.LabFrame {
         glu.uniform4fv(uniform.uPointLightColors, env.aura.pointLightColors)
 
         // tune - fog color
-        glu.uniform4fv(uniform.uFogDepth, vec4.rgba('#1d0722FF'))
+        glu.uniform4fv(uniform.uFogDepth, vec4ext.rgba('#1d0722FF'))
     }
 
     postDraw() {
