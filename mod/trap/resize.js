@@ -5,4 +5,6 @@ function resize() {
         if (isFun(state.resize)) state.resize()
         if (state.trap && isFun(state.trap.resize)) state.trap.resize()
     }
+
+    lab.emit('resize')
 }

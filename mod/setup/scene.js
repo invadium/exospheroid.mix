@@ -84,7 +84,7 @@ function scene() {
                 // geo: lib.geo.glib.cube,
                 // geo: lib.geo.glib['mod-octahedron'],
                 // geo: lib.geo.glib['octahedron'],
-                geo: lib.geoLibrary.mesh.selectOne('octahedron'),
+                geo: lib.glib.mesh.selectOne('octahedron'),
                 m: {
                     a: vec4( 0,  0,  1, 1),
                     d: vec4(.1, .8, .9, 0),
@@ -167,7 +167,7 @@ function scene() {
 
     const spinner = lab.port.spawn('GeoSpinner', {
         name:       'spinner',
-        geoLibrary:  lib.geoLibrary,
+        glib:        lib.glib,
     })
 
     // move camera back a little

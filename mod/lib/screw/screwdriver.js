@@ -605,7 +605,7 @@ const $ = {
         }
 
         // lib.geo.cur = geo // TODO do we have any reasone to preserve that as current in the lib?
-        lib.geoLibrary.attachMesh(geo)
+        lib.glib.attachMesh(geo)
         return this
     },
 

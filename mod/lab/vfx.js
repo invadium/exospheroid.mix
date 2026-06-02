@@ -1,4 +1,4 @@
-const Z = 9999
+const Z = -901
 
 // states
 const HIDDEN = 0

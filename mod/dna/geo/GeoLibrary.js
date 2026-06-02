@@ -9,7 +9,7 @@ class GeoLibrary extends sys.Frame {
 
     constructor(st) {
         super( augment({
-            name: 'geoLibrary',
+            name: 'glib',
 
             // cur:  null,  // TODO do we need that one for anything?
         }, st) )

@@ -40,7 +40,7 @@ class GeoSpinner {
         }
 
         const tags = env.config.tags? env.config.tags.split(',') : null
-        this.geoLibrary.mesh._ls.forEach((g) => {
+        this.glib.mesh._ls.forEach((g) => {
             if (!tags || matchTag(g, tags)) {
                 const shape = _.geoShape(g)
                 shape.geo = g

@@ -17,7 +17,7 @@ function unscrewScript(script) {
 }
 
 function unscrewByName(name) {
-    const script = lib.geoLibrary.script[name]
+    const script = lib.glib.script[name]
     if (!script) throw new Error(`expect unknown script [${name}]`)
 
     unscrewScript(script)
@@ -29,7 +29,7 @@ function unscrewScripts(ls) {
 
 function geometry() {
 
-    unscrewScripts(lib.geoLibrary.script._ls)
+    unscrewScripts(lib.glib.script._ls)
 
     // generate meshes
     const sd = lib.screw.screwdriver
@@ -46,7 +46,7 @@ function geometry() {
     sd.push('cubeTwo').label().bake()
     */
 
-    // lib.screw.unscrew.setLibrary(lib.geoLibrary)
+    // lib.screw.unscrew.setLibrary(lib.glib)
     // lib.screw.unscrew( lib.screw.screwUp(lib.screwUp.cube) )
     // lib.screw.unscrew( lib.screw.screwUp(lib.screwUp.octahedron) )
 
@@ -54,7 +54,7 @@ function geometry() {
     // lib.screw.unscrew(r2)
 
     log('=== paint colorless meshes ===')
-    const glib = lib.geoLibrary
+    const glib = lib.glib
     const colorlessMeshes = glib.mesh._ls.filter(g => !g.colors)
 
     colorlessMeshes.forEach(g => {
@@ -67,15 +67,15 @@ function geometry() {
     })
 
     /*
-    g = lib.geoLibrary.mesh.selectOne('octahedron')
+    g = lib.glib.mesh.selectOne('octahedron')
     g.colors = []
     sd.next( g ).randomColors().bake()
 
-    g = lib.geoLibrary.mesh.selectOne('mod-octahedron')
+    g = lib.glib.mesh.selectOne('mod-octahedron')
     g.colors = []
     sd.next( g ).randomColors().bake()
 
-    g = lib.geoLibrary.mesh.selectOne('monoTriangle')
+    g = lib.glib.mesh.selectOne('monoTriangle')
     g.colors = []
     sd.next( g ).randomColors().bake()
     */

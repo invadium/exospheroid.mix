@@ -4,9 +4,9 @@ function parseDependencies(src) {
 
 function up(src, name, path) {
     // make sure we have the geo library
-    if (!lib.geoLibrary) {
+    if (!lib.glib) {
         lib.attach( new dna.geo.GeoLibrary() )
-        lib.screw.unscrew.setLibrary(lib.geoLibrary)
+        lib.screw.unscrew.setLibrary(lib.glib)
     }
 
     // screw up the screw script source into a rune
@@ -20,7 +20,7 @@ function up(src, name, path) {
     // lib.screw.unscrew( runes, false ) 
     
     // schedule for unscrew
-    lib.geoLibrary.script.attach({
+    lib.glib.script.attach({
         name,
         path,
         src,
