@@ -21,10 +21,10 @@ function identity(rm) {
 
     rm[6 ] = 0
     rm[7 ] = 0
-    rm[8 ] = 0
+    rm[8 ] = 1
 
     rm[9 ] = 0
-    rm[10] = 1
+    rm[10] = 0
     rm[11] = 0
 
     return this
@@ -626,7 +626,7 @@ function perspective(rm, fovy, aspectRate, zNear, zFar) {
     if (zFar) {
         const nf = 1 / (zNear - zFar)
         rm[8] = (zNear + zFar) * nf
-        // rm[9] = -1
+        // rm[11] = -1  // TODO what can we do with this negative???
         rm[9] = rm[10] = 0
         rm[11] = 2 * zFar * zNear * nf
     } else {

@@ -119,7 +119,7 @@ function perspective(rm, fovy, aspectRate, zNear, zFar) {
     rm[6] = rm[7] = rm[8] = rm[9] = 0
     if (zFar) {
         let nf = 1 / (zNear - zFar)
-        rm[10] = (zNear + zFar) * nf
+        rm[10] = (zFar + zNear) * nf
         rm[11] = -1
         rm[12] = rm[13] = 0
         rm[14] = 2 * zFar * zNear * nf

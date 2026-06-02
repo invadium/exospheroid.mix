@@ -20,8 +20,36 @@ function glare() {
         },
     } )
 
-    glare.spawn( dna.glare.Surface, {
-        mesh: lib.glib.mesh.octahedron,
+    glare.spawn( dna.glare.Form, {
+        name:  'ship',
+        pos:   vec3(0, 0, -20),
+        rot:   vec3(0, 0, 0),
+        scale: vec3(10, 10, 10),
+        surface: new dna.glare.Surface({
+            //mesh: lib.glib.mesh.octahedron,
+            mesh: lib.glib.mesh.probe,
+        }),
+
+        init: function() {
+            this.scaleDir = 1
+        },
+
+        evo: function(dt) {
+            /*
+            this.scale[0] += this.scaleDir * .1 * dt
+            this.scale[1] += this.scaleDir * .1 * dt
+            this.scale[2] += this.scaleDir * .1 * dt
+            if (this.scaleDir > 0 && this.scale[0] >  1.5) this.scaleDir *= -1
+            if (this.scaleDir < 0 && this.scale[0] < .15) this.scaleDir *= -1
+            */
+            // this.rot[0] += .5 * dt
+            this.rot[1] += .5 * dt
+            this.rot[2] += .25 * dt
+
+            //this.pos[0] -= .1 * dt
+            //this.pos[1] += .1 * dt
+            //this.pos[2] -= .2 * dt
+        },
     })
 }
 glare.Z = 201

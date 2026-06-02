@@ -25,7 +25,15 @@ class Viewport extends sys.LabFrame {
         // define and clip the viewport
         glow.viewport(x, y, w, h)
         glow.clear()
+
+        // init view matrix
+        glow.useView()
         glow.identity()
+        glow.perspective(30, w/h, 0, 1)
+        // init model matrix
+        glow.useModel()
+        glow.identity()
+
 
         super.draw()
 
