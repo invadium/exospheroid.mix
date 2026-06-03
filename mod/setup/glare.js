@@ -24,7 +24,7 @@ function glare() {
         name:  'ship',
         pos:   vec3(0, 0, -100),
         rot:   vec3(0, 0, 0),
-        scale: vec3(40, 40, 40),
+        scale: vec3(10, 10, 10),
         surface: new dna.glare.Surface({
             //mesh: lib.glib.mesh.octahedron,
             mesh: lib.glib.mesh.probe,

@@ -184,6 +184,10 @@ const glow = {
 
         math.mat43.copy(MV, M)
         // math.mat43.mul(MV, MV, V)
+        
+        const NEARZ = 1
+        const FOVY = 30
+        const fd = 1/Math.tan(.5 * FOVY * DEG_TO_RAD)
 
         fill(.5, .5, .5)
         lineWidth(this.vp.dx * this.lw)
@@ -196,18 +200,18 @@ const glow = {
             math.vec4.applyMat43(v1, v1, MV)
             //v1[3] -= v1[2]
             v1[3] = -v1[2]
-            v1[0] /= v1[3]
-            v1[1] /= v1[3]
+            v1[0] = -(v1[0] * fd) / (v1[3] + fd)
+            v1[1] = (v1[1] * fd) / (v1[3] + fd)
             math.vec4.applyMat43(v2, v2, MV)
             //v2[3] -= v2[2]
             v2[3] = -v2[2]
-            v2[0] /= v2[3]
-            v2[1] /= v2[3]
+            v2[0] = -(v2[0] * fd) / (v2[3] + fd)
+            v2[1] = (v2[1] * fd) / (v2[3] + fd)
             math.vec4.applyMat43(v3, v3, MV)
             //v3[3] -= v3[2]
             v3[3] = -v3[2]
-            v3[0] /= v3[3]
-            v3[1] /= v3[3]
+            v3[0] = -(v3[0] * fd) / (v3[3] + fd)
+            v3[1] = (v3[1] * fd) / (v3[3] + fd)
             /*
             // transform vertices
             math.vec4.applyMat43(v1, v1, MV)
@@ -225,6 +229,7 @@ const glow = {
             */
 
             if (v1[2] < 0 && v2[2] < 0 && v3[2] < 0) {
+            // if (v1[2] > 0 && v2[2] > 0 && v3[2] > 0) {
                 /*
                 ctx.fillRect(v1[0]-R, v1[1]-R, R2, R2)
                 ctx.fillRect(v2[0]-R, v2[1]-R, R2, R2)
