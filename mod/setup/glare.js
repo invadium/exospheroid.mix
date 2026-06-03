@@ -22,9 +22,9 @@ function glare() {
 
     glare.spawn( dna.glare.Form, {
         name:  'ship',
-        pos:   vec3(0, 0, -20),
+        pos:   vec3(0, 0, -100),
         rot:   vec3(0, 0, 0),
-        scale: vec3(10, 10, 10),
+        scale: vec3(40, 40, 40),
         surface: new dna.glare.Surface({
             //mesh: lib.glib.mesh.octahedron,
             mesh: lib.glib.mesh.probe,
@@ -42,10 +42,11 @@ function glare() {
             if (this.scaleDir > 0 && this.scale[0] >  1.5) this.scaleDir *= -1
             if (this.scaleDir < 0 && this.scale[0] < .15) this.scaleDir *= -1
             */
-            // this.rot[0] += .5 * dt
-            this.rot[1] += .5 * dt
-            this.rot[2] += .25 * dt
-
+            //this.rot[0] += .5 * dt
+            //this.rot[1] += .5 * dt
+            this.rot[0] += -.2 * dt
+            this.rot[1] +=  .5 * dt
+            this.rot[2] +=  .2 * dt
             //this.pos[0] -= .1 * dt
             //this.pos[1] += .1 * dt
             //this.pos[2] -= .2 * dt

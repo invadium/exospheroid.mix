@@ -684,6 +684,7 @@ function applyMat43(rv, iv, tm) {
     rv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]  +  w * tm[9 ]
     rv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]  +  w * tm[10]
     rv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]  +  w * tm[11]
+    // nv[3] = 1 * w -- component stays the same
 
     return this
 }
@@ -700,6 +701,7 @@ function iapplyMat43(iv, tm) {
     nv[0] = x * tm[0]  +  y * tm[3]  +  z * tm[6]  +  w * tm[9 ]
     nv[1] = x * tm[1]  +  y * tm[4]  +  z * tm[7]  +  w * tm[10]
     nv[2] = x * tm[2]  +  y + tm[5]  +  z * tm[8]  +  w * tm[11]
+    // nv[3] = 1 * w -- component stays the same
 
     return nv
 }

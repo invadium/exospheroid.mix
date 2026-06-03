@@ -814,7 +814,6 @@ extend(mat43, {
     perspective,
     iperspective,
 
-
     equals,
     near,
     str,

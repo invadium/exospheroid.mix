@@ -29,7 +29,7 @@ class Viewport extends sys.LabFrame {
         // init view matrix
         glow.useView()
         glow.identity()
-        glow.perspective(30, w/h, 0, 1)
+        glow.perspective(30, w/h, 1, 256)
         // init model matrix
         glow.useModel()
         glow.identity()

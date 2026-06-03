@@ -62,7 +62,7 @@ class GeoSpinner {
             name:        g.name,
             pos:         vec3(),
             rot:         vec3(),
-            rotSpeed:    vec3(-.1, .5, 0),
+            rotSpeed:    vec3(-.2, .5, .2),
             angle:       0,
             targetAngle: 0,
             spin:        1,

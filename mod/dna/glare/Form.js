@@ -12,9 +12,7 @@ class Form {
         glow.pushMatrix()
 
         glow.translate( this.pos )
-        glow.rotateX( this.rot[0] )
-        glow.rotateY( this.rot[1] )
-        glow.rotateZ( this.rot[2] )
+        glow.rot( this.rot )
         glow.scale( this.scale )
 
         this.surface.draw()

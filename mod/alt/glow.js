@@ -92,6 +92,33 @@ const glow = {
         math.mat43.mul(this.mat, this.mat, M)
     },
 
+    rot(v) {
+        const 
+            cx = cos(v[0]), sx = sin(v[0]),
+            cy = cos(v[1]), sy = sin(v[1]),
+            cz = cos(v[2]), sz = sin(v[2])
+
+        const M = [
+            // x
+            cy * cz,
+            sx * sy * cz + cx * sz,
+            -cx * sy * cz + sx * sz,
+            // y
+            -cy * sz,
+            -sx * sy * sz + cx * cz,
+            cx * sy * sz + sx * cz,
+            // z
+            sy,
+            -sx * cy,
+            cx * cy,
+            // w
+            0,
+            0,
+            0,
+        ]
+        math.mat43.mul(this.mat, this.mat, M)
+    },
+
     translate(v3) {
         const M = [
             1,     0,     0,
@@ -167,14 +194,20 @@ const glow = {
                   v3 = [ w[i + 6], w[i + 7], w[i + 8], 1 ]
 
             math.vec4.applyMat43(v1, v1, MV)
-            v1[0] = (v1[0] / v1[3]) / v1[2]
-            v1[1] = (v1[1] / v1[3]) / v1[2]
+            //v1[3] -= v1[2]
+            v1[3] = -v1[2]
+            v1[0] /= v1[3]
+            v1[1] /= v1[3]
             math.vec4.applyMat43(v2, v2, MV)
-            v2[0] = (v2[0] / v2[3]) / v2[2]
-            v2[1] = (v2[1] / v2[3]) / v2[2]
+            //v2[3] -= v2[2]
+            v2[3] = -v2[2]
+            v2[0] /= v2[3]
+            v2[1] /= v2[3]
             math.vec4.applyMat43(v3, v3, MV)
-            v3[0] = (v3[0] / v3[3]) / v3[2]
-            v3[1] = (v3[1] / v3[3]) / v3[2]
+            //v3[3] -= v3[2]
+            v3[3] = -v3[2]
+            v3[0] /= v3[3]
+            v3[1] /= v3[3]
             /*
             // transform vertices
             math.vec4.applyMat43(v1, v1, MV)
