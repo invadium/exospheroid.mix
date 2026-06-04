@@ -1,0 +1,9 @@
+neogeo
+
+.025 .5 .025 mscale
+0 -1 0 translate
+cylinder
+
+"probe" tag
+"boom" name brew
+

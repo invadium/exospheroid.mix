@@ -1,0 +1,9 @@
+neogeo
+
+.01 .7 .01 mscale
+0 -1 0 translate
+cylinder
+
+"probe" tag
+"antenna" name brew
+
