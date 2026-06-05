@@ -36,6 +36,12 @@ const glow = {
         math.mat43.identity(this.mat)
     },
 
+    setMatrix: function(m) {
+        if (this.mat === this.model) this.model = m
+        else this.view = m
+        this.mat = m
+    },
+
     pushMatrix: function() {
         let BM = this.mstack[ this.istack ]
         if (!BM) {
@@ -180,10 +186,9 @@ const glow = {
               M  = this.model,
               V  = this.view,
               MV = this.MV
-        if (this.debug) debugger
 
-        math.mat43.copy(MV, M)
-        // math.mat43.mul(MV, MV, V)
+        math.mat43.copy(MV, V)
+        math.mat43.mul(MV, MV, M)
         
         const NEARZ = 1
         const FOVY = 30

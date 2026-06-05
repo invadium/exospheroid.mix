@@ -310,6 +310,65 @@ function fromAxes(iv1, iv2, iv3, iv4) {
     return nm
 }
 
+function setAxes(rm, iv1, iv2, iv3, iv4) {
+    rm[0 ] = iv1[0]
+    rm[1 ] = iv1[1]
+    rm[2 ] = iv1[2]
+
+    rm[3 ] = iv2[0]
+    rm[4 ] = iv2[1]
+    rm[5 ] = iv2[2]
+
+    rm[6 ] = iv3[0]
+    rm[7 ] = iv3[1]
+    rm[8 ] = iv3[2]
+
+    rm[9 ] = iv4[0]
+    rm[10] = iv4[1]
+    rm[11] = iv4[2]
+
+    return nm
+}
+
+function setMat4(rm, im) {
+    rm[0 ] = im[0 ]
+    rm[1 ] = im[1 ]
+    rm[2 ] = im[2 ]
+    rm[3 ] = 0
+
+    rm[4 ] = im[3 ]
+    rm[5 ] = im[4 ]
+    rm[6 ] = im[5 ]
+    rm[7 ] = 0
+
+    rm[8 ] = im[6 ]
+    rm[9 ] = im[7 ]
+    rm[10] = im[8 ]
+    rm[11] = 0
+
+    rm[12] = im[9 ]
+    rm[13] = im[10]
+    rm[14] = im[11]
+    rm[15] = 1
+}
+
+function setFromMat4(rm, im) {
+    rm[0 ] = im[0 ]
+    rm[1 ] = im[1 ]
+    rm[2 ] = im[2 ]
+
+    rm[3 ] = im[4 ]
+    rm[4 ] = im[5 ]
+    rm[5 ] = im[6 ]
+
+    rm[6 ] = im[8 ]
+    rm[7 ] = im[9 ]
+    rm[8 ] = im[10]
+
+    rm[9 ] = im[12]
+    rm[10] = im[13]
+    rm[11] = im[14]
+}
 
 // set values for 4x3 matrix
 //
@@ -667,6 +726,36 @@ function iperspective(fovy, aspectRate, zNear, zFar) {
     return nm
 }
 
+// set camera look at matrix
+//
+// @param {array/vec3} cam - the camera coordinates 3D vector
+// @param {array/vec3} tar - the target coordinates 3D vector
+// @param {array/vec3} up - the up camera orientation 3D vector (tilt)
+// @returns {obj/lib/mat43} mat4333 lib object for chaining
+function lookAt(rm, cam, tar, up) {
+    const zAxis = math.vec3.inormalize( math.vec3.isub(cam, tar) )
+    const xAxis = math.vec3.inormalize( math.vec3.icross(up, zAxis) )
+    const yAxis = math.vec3.inormalize( math.vec3.icross(zAxis, xAxis) )
+
+    setAxis(rm, xAxis, yAxis, zAxis, cam)
+
+    return this
+}
+
+// generates camera look at matrix
+//
+// @param {array/vec3} cam - the camera coordinates 3D vector
+// @param {array/vec3} tar - the target coordinates 3D vector
+// @param {array/vec3} up - the up camera orientation 3D vector (tilt)
+// @return {array/mat43} the look-at 4x3 matrix
+function ilookAt(cam, tar, up) {
+    const zAxis = math.vec3.inormalize( math.vec3.isub(cam, tar) )
+    const xAxis = math.vec3.inormalize( math.vec3.icross(up, zAxis) )
+    const yAxis = math.vec3.inormalize( math.vec3.icross(zAxis, xAxis) )
+
+    return fromAxes(xAxis, yAxis, zAxis, cam)
+}
+
 
 
 // test if two 4x3 matrices have equal components
@@ -793,6 +882,8 @@ extend(mat43, {
     copy,
     clone,
     fromMat4,
+    setMat4,
+    setFromMat4,
     fromMat43R,
     setQuat,
     fromQuat,
@@ -813,6 +904,8 @@ extend(mat43, {
 
     perspective,
     iperspective,
+    lookAt,
+    ilookAt,
 
     equals,
     near,

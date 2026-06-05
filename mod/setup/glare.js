@@ -19,9 +19,13 @@ function glare() {
             this.y = lab.h - this.h - EDGE
         },
     } )
+    glare.spawn( new dna.glare.Camera, {
+        name: 'cam',
+        pos:   vec3(-5, 10, -10),
+    })
 
     glare.spawn( dna.glare.Form, {
-        name:  'ship',
+        name:  'probe',
         pos:   vec3(0, 0, -100),
         rot:   vec3(0, 0, 0),
         scale: vec3(10, 10, 10),

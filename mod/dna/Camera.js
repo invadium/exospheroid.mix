@@ -3,14 +3,13 @@ const EntityFrame = require('dna/EntityFrame')
 class Camera extends EntityFrame {
 
     constructor(st) {
-        const df = {
+        if (!st._traits) st._traits = []
+        st._traits = extend(st._traits, [ dna.trait.attitudeTrait ])
+        super( extend({
             vfov:  30,
             zNear: 1,
             zFar:  256,
-        }
-        if (!st._traits) st._traits = []
-        st._traits = extend(st._traits, [ dna.trait.attitudeTrait ])
-        super( extend(df, st) )
+        }, st) )
     }
 
     capture() {

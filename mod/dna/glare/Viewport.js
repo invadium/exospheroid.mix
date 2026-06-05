@@ -8,6 +8,7 @@ class Viewport extends sys.LabFrame {
             y:     0,
             w:     0,
             h:     0,
+            cam:   null,
 
             outline: {
                 hidden: false,
@@ -20,7 +21,7 @@ class Viewport extends sys.LabFrame {
     }
 
     draw() {
-        const { x, y, w, h, outline } = this
+        const { x, y, w, h, cam, outline } = this
 
         // define and clip the viewport
         glow.viewport(x, y, w, h)
@@ -29,11 +30,16 @@ class Viewport extends sys.LabFrame {
         // init view matrix
         glow.useView()
         glow.identity()
-        glow.perspective(30, w/h, 1, 256)
+        if (cam) {
+            glow.setMatrix( cam.viewMatrix() )
+            // glow.perspective(30, w/h, 1, 256)
+        }
+        // debug move
+        // glow.view[11] = env.time * 8
+
         // init model matrix
         glow.useModel()
         glow.identity()
-
 
         super.draw()
 
