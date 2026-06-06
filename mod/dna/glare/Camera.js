@@ -36,9 +36,9 @@ class Camera {
                 this.up,
             )
             // fix the attitude based on the look up matrix
-            this.left = mat43.extractVec3(m, 0)
-            this.up   = mat43.extractVec3(m, 1)
-            this.dir  = mat43.extractVec3(m, 2)
+            mat43.extractVec3(this.left, m, 0)
+            mat43.extractVec3(this.up, m, 1)
+            mat43.extractVec3(this.dir, m, 2)
 
         } else if (this.targetXYZ) {
             const at = vec3(
@@ -52,9 +52,9 @@ class Camera {
                 this.up,
             )
             // fix the attitude based on the look up matrix
-            this.left = mat43.extractVec3(m, 0)
-            this.up   = mat43.extractVec3(m, 1)
-            this.dir  = mat43.extractVec3(m, 2)
+            mat43.extractVec3(this.left, m, 0)
+            mat43.extractVec3(this.up, m, 1)
+            mat43.extractVec3(this.dir, m, 2)
 
         } else {
             vec3.normalize( this.up, this.up )

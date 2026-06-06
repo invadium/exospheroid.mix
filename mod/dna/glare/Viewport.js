@@ -20,6 +20,11 @@ class Viewport extends sys.LabFrame {
         }, st) )
     }
 
+    bind(cam) {
+        this.cam = $.cam = cam
+        pin.link(cam)
+    }
+
     draw() {
         const { x, y, w, h, cam, outline } = this
 

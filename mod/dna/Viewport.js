@@ -20,7 +20,8 @@ class Viewport extends sys.LabFrame {
 
     bindCamera(cam) {
         if (!(cam instanceof dna.Camera)) throw new Error(`Wrong camera entity - it is supposed to be an instance of dna.Camera!`)
-        this.cam = pin.cam = cam
+        this.cam = $.cam = cam
+        pin.link(cam)
     }
 
     setupDraw() {

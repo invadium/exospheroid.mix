@@ -11,6 +11,12 @@ function glare() {
             this.onResize()
         },
 
+        // custom bind to avoid clash with the WebGL Viewport
+        bind(cam) {
+            this.cam = $.gcam = cam
+            pin.link(cam, 'gcam')
+        },
+
         onResize: function() {
             const EDGE = 40
             this.w = pb(32)
@@ -19,10 +25,11 @@ function glare() {
             this.y = lab.h - this.h - EDGE
         },
     } )
-    glare.spawn( new dna.glare.Camera, {
+    const cam = glare.spawn( new dna.glare.Camera, {
         name: 'cam',
-        pos:   vec3(-5, 10, -10),
+        pos:   vec3(0, 0, -40),
     })
+    glare.bind(cam)
 
     glare.spawn( dna.glare.Form, {
         name:  'probe',

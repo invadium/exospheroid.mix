@@ -96,6 +96,7 @@ class GeoSpinner {
             },
 
             evoToTargetAngle: function(dt) {
+                // move the shape to the target angle placement on the spinner
                 const ta = this.targetAngle
                 if (this.angle === ta) return
 
@@ -163,11 +164,14 @@ class GeoSpinner {
     evoSpin(dt) {
         // turn the geo spinner to target
         const ta = this.targetAngle()
-        env.dump['Target Angle'] = Math.round(ta * RAD_TO_DEG) + ' - ' + Math.round(ta * 100)/100
-        if (this.angle === ta) return
+        pin.info.set('Target Angle', ta)
+        // env.dump['Target Angle'] = Math.round(ta * RAD_TO_DEG) + ' - ' + Math.round(ta * 100)/100
+        if (this.angle === ta) return // we are on target spin!
 
+        // TODO fix angle normalization problem when we skip over the target in endless loop
+        //      something to do on how we normalize/wrap angles on edges
         const _angle = this.angle
-        this.angle = math.normalizeAngle(this.angle + this.spin * this.spinSpeed * dt)
+        this.angle = this.angle + this.spin * this.spinSpeed * dt
 
         // fit the target
         if (this.spin > 0) {
@@ -175,6 +179,7 @@ class GeoSpinner {
         } else {
             if (_angle >= ta && this.angle <= ta) this.angle = ta
         }
+        this.angle = math.normalizeAngle(this.angle)
     }
 
     evoTransition(dt) {
@@ -193,6 +198,7 @@ class GeoSpinner {
     }
 
     evo(dt) {
+        if (this.debug) debugger
         this.justifyForms()
         this.evoShapes(dt)
         this.evoSpin(dt)
