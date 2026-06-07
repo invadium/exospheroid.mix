@@ -24,6 +24,13 @@ const ref = [
     'sub',
     'mul',
     'div',
+    'sin',
+    'cos',
+    'tan',
+    'asin',
+    'acos',
+    'atan',
+    'atan2',
     'precision',
     'smooth',
     'sharp',
@@ -69,6 +76,7 @@ const ref = [
     //'tetrahedron',
     //'cone',
     'dump',
+    'halt',
     //'dumpv',
 
     // ghost codes with special implementation

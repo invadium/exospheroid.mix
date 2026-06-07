@@ -1,6 +1,7 @@
 #depends dish
 #depends bus
 #depends boom
+#depends triBoom
 #depends antenna
 #depends RTG
 #depends sphere
@@ -54,11 +55,11 @@ mpush
 
 .7 PI mul mrotZ
 -.2 PI mul mrotY
-"boom" place
+"triBoom" place
 
 0 -1.05 0 translate
 -- -.1 PI mul mrotZ
-"boom" place
+"triBoom" place
 
 mpop
 
@@ -69,11 +70,11 @@ mpush
 
 .7 PI mul mrotZ
 -.2 PI mul mrotY
-"boom" place
+"triBoom" place
 
 0 -1.05 0 translate
 -- -.1 PI mul mrotZ
-"boom" place
+"triBoom" place
 
 mpop
 

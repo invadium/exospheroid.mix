@@ -1,0 +1,56 @@
+
+neogeo
+
+.025 .2 .025 mscale
+
+leftXZ: PI .8 mul dup cos swap sin ;
+rightXZ: PI 2.2 mul dup cos swap sin ;
+
+
+segment:
+
+0 1 -1
+0 0 -1
+leftXZ 0 swap
+tri
+
+0 1 -1
+leftXZ 0 swap
+leftXZ 1 swap
+tri
+
+leftXZ 1 swap
+leftXZ 0 swap
+rightXZ 0 swap
+tri
+
+leftXZ  1 swap
+rightXZ 0 swap
+rightXZ 1 swap
+tri
+
+rightXZ 1 swap
+rightXZ 0 swap
+0 0 -1
+tri
+
+rightXZ 1 swap
+0 0 -1
+0 1 -1
+tri
+
+;
+
+segment
+0 -1 0 translate
+segment
+0 -1 0 translate
+segment
+0 -1 0 translate
+segment
+0 -1 0 translate
+segment
+
+"probe" tag
+"triBoom" name brew
+

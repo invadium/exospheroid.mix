@@ -152,6 +152,8 @@ function dumpVM() {
     log(`regs -- x:${x}, y:${y}, z:${z}, w:${w}`)
     log('current model matrix:')
     dir(M)
+    log('stack:')
+    log(s)
 }
 
 const ops = [
@@ -194,9 +196,9 @@ const ops = [
         wM(mesh.vertices)
     },
     // HPI (Half PI) - push half PI
-    function PI()  { s.push( math.PI ) },
-    function HPI() { s.push( math.PI/2 ) },
-    function TAU() { s.push( TAU ) },
+    function PI()  { s.push( Math.PI ) },
+    function HPI() { s.push( .5 * Math.PI ) },
+    function TAU() { s.push(  2 * Math.PI ) },
     function add() { s.push( pop() + pop() ) },
     function sub() {
         x = pop()
@@ -208,6 +210,28 @@ const ops = [
     function div() {
         const x = pop()
         s.push( pop() / x )
+    },
+    function sin() {
+        s.push( Math.sin( pop() ) )
+    },
+    function cos() {
+        s.push( Math.cos( pop() ) )
+    },
+    function tan() {
+        s.push( Math.tan( pop() ) )
+    },
+    function asin() {
+        s.push( Math.asin( pop() ) )
+    },
+    function acos() {
+        s.push( Math.acos( pop() ) )
+    },
+    function atan() {
+        s.push( Math.atan( pop() ) )
+    },
+    function atan2() {
+        const x = pop(), y = pop()
+        s.push( Math.atan2(y, x) )
     },
     function precision() { P = pop() },
     function smooth() { _smooth = true  },
@@ -580,6 +604,11 @@ const ops = [
     function dump() {
         dumpVM()
     },
+
+    function halt() {
+        dumpVM()
+        debugger
+    },
 ]
 const action = {}
 ops.forEach(op => action[op.name] = op)
@@ -743,8 +772,19 @@ function exec(opcodes) {
                             //    const fn = ops[op]
                             //    if (!fn) throw `no function for op [${op}] - [${ref[op]}]`
                             //}
-                            if (!isFun(ops[op])) debugger
+                            if (!isFun(ops[op])) {
+                                dumpVM()
+                                throw new Error(`Can't find opcode implementation: ${op}`)
+                            }
                             ops[op]()
+                            s.forEach(e => {
+                                if (typeof e === 'number' && isNaN(e)) {
+                                    log('op #' + op)
+                                    dir(ops[op])
+                                    dumpVM()
+                                    debugger
+                                }
+                            })
                         }
                 }
             }
@@ -763,6 +803,7 @@ function exec(opcodes) {
 }
 
 function resetEmuState() {
+    s     = []
     def   = []
     brews = []
     action.mid()
