@@ -11,6 +11,35 @@ neogeo
 -- place the main dish
 "dish" place
 
+mpush
+ 0  -.3   0  translate
+.1   .1  .1  mscale
+"dish" place
+mpop
+
+mpush
+    mpush
+        0 .35 .5 translate
+        .2 PI mul mrotY
+        .3 .78 .3 mscale
+        "boom" place
+    mpop
+    mpush
+        .333 TAU mul mrotX
+        0 .35 .5 translate
+        .2 PI mul mrotY
+        .3 .78 .3 mscale
+        "boom" place
+    mpop
+    mpush
+        .666 TAU mul mrotX
+        0 .35 .5 translate
+        .2 PI mul mrotY
+        .3 .78 .3 mscale
+        "boom" place
+    mpop
+mpop
+
 -- shift and place the main bus
 0 .5 0 translate
 "bus"  place
