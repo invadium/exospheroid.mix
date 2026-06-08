@@ -21,22 +21,22 @@ mpush
     mpush
         0 .35 .5 translate
         .2 PI mul mrotY
-        .3 .78 .3 mscale
-        "boom" place
+        .3 .76 .3 mscale
+        "triBoom" place
     mpop
     mpush
         .333 TAU mul mrotX
         0 .35 .5 translate
         .2 PI mul mrotY
-        .3 .78 .3 mscale
-        "boom" place
+        .3 .76 .3 mscale
+        "triBoom" place
     mpop
     mpush
         .666 TAU mul mrotX
         0 .35 .5 translate
         .2 PI mul mrotY
-        .3 .78 .3 mscale
-        "boom" place
+        .3 .76 .3 mscale
+        "triBoom" place
     mpop
 mpop
 
