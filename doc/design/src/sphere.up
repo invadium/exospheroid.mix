@@ -1,9 +1,0 @@
-=== just a sphere ===
-
-neogeo -- declare a new shape
-
-sphere
-
--- name and brew the shape
-"monoSphere" name brew
-
